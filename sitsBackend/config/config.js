@@ -1,0 +1,1 @@
+//sequalize config with DB credentials 
