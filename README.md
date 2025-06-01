@@ -1,5 +1,8 @@
 # Roor-level project overview
 
+run npm install to install all dependencies
+
+
 # Developer 3: Dependencies & Security
 # Task 3: Node.js Dependencies
 Express.js: For building the RESTful API.
