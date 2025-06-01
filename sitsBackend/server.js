@@ -1,8 +1,22 @@
-// server & Clustering entry point
+// backend/server.js
+import dotenv from 'dotenv';
+import {sequelize, connectDB}  from './config/db.js';
+import app from './app.js';
+
+dotenv.config(); 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+const startServer = async () => {
+  try {
+    await connectDB();          
+    await sequelize.sync();     
+    app.listen(PORT, () => {
+      console.log(`✅ Server running at http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1); 
+  }
+};
 
-
-});
+startServer();
