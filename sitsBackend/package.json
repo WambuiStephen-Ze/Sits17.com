@@ -4,9 +4,12 @@
   "main": "app.js",
   "type": "module",
   "directories": {
-    "test": "test"
+    "test": "tests",
+    "type": "module"
   },
-  "scripts": {
+  
+    "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
   "keywords": [],
