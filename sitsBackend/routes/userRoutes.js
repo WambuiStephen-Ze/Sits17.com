@@ -1,15 +1,14 @@
-// routes/userRoutes.js
 import express from 'express';
-import {
-  createUser,
-  getAllUsers,
-  getUserById
-} from '../controllers/userController.js';
+import { registerParent, getUser, updateUserData } from '../controllers/userController.js';
 
 const router = express.Router();
+// registering new parent
+router.post('/register', registerParent);
 
-router.post('/', createUser);
-router.get('/', getAllUsers);
-router.get('/:id', getUserById);
+// get user by id
+router.get('/:id', getUser);
+
+// update user date
+router.put('/:id', updateUserData);
 
 export default router;

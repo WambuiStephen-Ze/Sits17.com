@@ -1,21 +1,50 @@
-// models/booking.js
 import { DataTypes } from 'sequelize';
-import sequelize  from '../config/config.js';
-import {UserProfile} from './user.js';
+import { sequelize } from './index.js';
+import User from './user.js';
+import Sitter from './sitter.js';
 
-export const BookingConfirmation = sequelize.define('BookingConfirmation', {
-  bookedSitters: { type: DataTypes.JSON },
-  userId: { type: DataTypes.INTEGER, allowNull: false },
-  confirmationEmail: { type: DataTypes.BOOLEAN },
-  bookingDate: { type: DataTypes.DATE },
+const Booking = sequelize.define('Booking', {
+  bookedSitters: {
+    // storing array of sitters IDs
+    type: DataTypes.JSON, 
+    allowNull: false,
+    defaultValue: [],
+  },
+
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+// name of the related table
+      model: 'Users', 
+      key: 'id',
+    },
+  },
+
+  // timestamp
+  confirmationEmail: {
+    type: DataTypes.BOOLEAN, 
+    defaultValue: false,
+  },
+
+  bookingDate: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
+
   status: {
-    type: DataTypes.ENUM('pending', 'confirmed', 'completed'),
+    type: DataTypes.ENUM('pending', 'confirmed', 'completed', 'cancelled'),
     defaultValue: 'pending',
   },
-}, {
-  tableName: 'booking_confirmations',
+
+}, 
+{
+  tableName: 'bookings',
   timestamps: true,
 });
 
-UserProfile.hasMany(BookingConfirmation, { foreignKey: 'userId' });
-BookingConfirmation.belongsTo(UserProfile, { foreignKey: 'userId' });
+// relationships 
+User.hasMany(Booking, { foreignKey: 'userId' });
+Booking.belongsTo(User, { foreignKey: 'userId' });
+
+export default Booking;
