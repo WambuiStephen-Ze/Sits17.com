@@ -1,42 +1,33 @@
-// controllers/bookingController.js
-import { BookingConfirmation } from '../models/booking.js';
+//booking controls 
+import { Booking } from '../models';
 
-export const createBooking = async (req, res) => {
+// Create a new booking request
+exports.createBooking = async (req, res) => {
   try {
-    const booking = await BookingConfirmation.create(req.body);
+    const booking = await Booking.create(req.body);
     res.status(201).json(booking);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to create booking', err });
   }
 };
 
-export const getAllBookings = async (req, res) => {
+// all bookings of an individual
+exports.getAllBookings = async (req, res) => {
   try {
-    const bookings = await BookingConfirmation.findAll();
+    const bookings = await Booking.findAll();
     res.status(200).json(bookings);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    res.status(500).json({ message: 'Error retrieving bookings', err });
   }
 };
 
-export const getBookingById = async (req, res) => {
+// code to cancel booking
+exports.cancelBooking = async (req, res) => {
   try {
-    const booking = await BookingConfirmation.findByPk(req.params.id);
-    if (!booking) return res.status(404).json({ message: 'Booking not found' });
-    res.status(200).json(booking);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-export const updateBookingStatus = async (req, res) => {
-  try {
-    const booking = await BookingConfirmation.findByPk(req.params.id);
-    if (!booking) return res.status(404).json({ message: 'Booking not found' });
-    booking.status = req.body.status;
-    await booking.save();
-    res.status(200).json(booking);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    const result = await Booking.destroy({ where: { id: req.params.id } });
+    if (!result) return res.status(404).json({ message: 'Booking not found' });
+    res.status(200).json({ message: 'Booking cancelled' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error cancelling booking', err });
   }
 };

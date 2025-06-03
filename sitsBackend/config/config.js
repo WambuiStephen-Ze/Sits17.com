@@ -1,40 +1,14 @@
 //sequalize config with DB credentials 
-// config/config.js
-import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
+// backend/config/config.js
+require('dotenv').config();
 
-dotenv.config();
-
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASS,
-  {
+module.exports = {
+  port: process.env.PORT || 5000,
+  jwtSecret: process.env.JWT_SECRET,
+  db: {
+    name: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    pass: process.env.DB_PASS,
     host: process.env.DB_HOST,
-    dialect: process.env.DB_DIALECT || 'mysql',
-    logging: process.env.NODE_ENV === 'development' ? console.log : false,
-    pool: {
-      max: 5,
-      min: 0,
-      acquire: 30000,
-      idle: 10000
-    }
-  }
-);
-
-export const connectDB = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log('✅ Database connection established successfully.');
-
-    if (process.env.NODE_ENV === 'development') {
-      await sequelize.sync({ alter: true });
-      console.log('✅ Database synced.');
-    }
-  } catch (error) {
-    console.error('❌ Unable to connect to the database:', error);
-    process.exit(1);
-  }
+  },
 };
-
-export default sequelize;

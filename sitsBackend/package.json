@@ -2,11 +2,12 @@
   "name": "sitsbackend",
   "version": "1.0.0",
   "main": "app.js",
-  "directories": {
-    "test": "tests"
-    
-  },
   "type": "module",
+  "directories": {
+    "test": "tests",
+    "type": "module"
+  },
+  
     "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"

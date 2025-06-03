@@ -1,14 +1,60 @@
-// models/sitter.js
-import { DataTypes } from 'sequelize';
-import  sequelize  from '../config/config.js';
+import { Sequelize } from 'sequelize';
 
-export const SitterProfile = sequelize.define('SitterProfile', {
-  name: { type: DataTypes.STRING, allowNull: false },
-  profilePic: { type: DataTypes.STRING },
-  experience: { type: DataTypes.TEXT },
-  location: { type: DataTypes.STRING },
-  availability: { type: DataTypes.JSON },
-}, {
-  tableName: 'sitter_profiles',
-  timestamps: true,
-});
+export default (sequelize) => {
+  const Sitter = sequelize.define('sitter', {
+    id: {
+      type: Sequelize.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    name: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    email: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      // to Ensure email uniqueness
+      unique: true, 
+    },
+    password: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    experience: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    location: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    availability: {
+      type: Sequelize.JSON,
+      allowNull: true,
+    },
+    profilePic: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+  }, {
+    timestamps: false,
+    tableName: 'sitters',
+    hooks: {
+      beforeCreate: async (sitter) => {
+        if (sitter.password) {
+          const salt = await import('bcryptjs').then(({ default: bcrypt }) => bcrypt.genSalt(10));
+          sitter.password = await import('bcryptjs').then(({ default: bcrypt }) => bcrypt.hash(sitter.password, salt));
+        }
+      },
+      beforeUpdate: async (sitter) => {
+        if (sitter.password) {
+          const salt = await import('bcryptjs').then(({ default: bcrypt }) => bcrypt.genSalt(10));
+          sitter.password = await import('bcryptjs').then(({ default: bcrypt }) => bcrypt.hash(sitter.password, salt));
+        }
+      },
+    },
+  });
+
+  return Sitter;
+};
