@@ -3,6 +3,27 @@
 run npm install to install all dependencies
 # Roor-level project overview
 
+# Developer 1: Database & Models
+# Task 1: Database Design
+Sitter Profile Table:
+	name (String)
+	profilePic (String - URL or file path)
+	experience (String or Array - e.g., years or skills)
+	location (String or GeoJSON for coordinates)
+	availability (Boolean or Array of time slots)
+User Profile Table:
+	name (String)
+	profilePic (String - URL or file path)
+	location (String or GeoJSON)
+	numberOfChildren (Integer)
+Booking Confirmation Table:
+	 bookedSitters (Array of sitter IDs)
+	userId (Foreign key to user profile)
+	confirmationEmail (Boolean or Timestamp)
+	bookingDate (Date)
+	status (Enum - e.g., pending, confirmed, completed)
+Using  the right relational database
+
 # Developer 3: Dependencies & Security
 # Task 3: Node.js Dependencies
 Express.js: For building the RESTful API.
