@@ -10,6 +10,7 @@ export async function getUsers() {
   }
 }
 
+
 export async function getUser(id) {
   try {
     const user = await User.findByPk(id);

@@ -6,14 +6,17 @@ import dotenv from 'dotenv';
 import { getUsers, getUser, createUser } from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import sitterRoutes from './routes/sitterRoutes.js';
-import { connectDB } from './models/index.js';
+import { connectDB, User, Sitter, Booking } from './models/index.js';
 import { registerSitter, getAllSitters, getSitterById,updateSitter } from './controllers/sitterController.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import emailRoutes from './routes/emailRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+// import stripe from 'stripe';
+const stripeClient = stripe(process.env.STRIPE_SECRET_KEY);
 
 dotenv.config();
 
+process.env.STRIPE_SECRET_KEY;
 const app = express();
 
 // Connect to the database
@@ -52,6 +55,25 @@ app.post('/users', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+// STRIPE 
+app.post('/payment', async (req, res) => {
+  const session = await stripe.payment.sessions .create;
+  line_items: [
+    {
+      price_deta: {
+        currency: 'Nigerian Naira',
+        product_data: {
+          name: 'form name'
+        }
+      }
+    }
+  ]
+  mode: 'payment',
+  success_url, 'http://localhost:3000/pay',
+  cancel_url,'http://localhost:3000/cancel'
+
+})
 
 // Other Routes
 app.use('/api/users', userRoutes);

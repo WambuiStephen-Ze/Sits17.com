@@ -1,40 +1,41 @@
-import { Sequelize } from 'sequelize';
+import { sequelize } from './index.js';
+import { DataTypes } from 'sequelize';
 import bcrypt from 'bcryptjs';
 
-export default (sequelize) => {
+const defineUserModel = (sequelize) => {}
   const User = sequelize.define('user', {
     id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
     name: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     email: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       unique: true,
     },
     password: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     role: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: true, // e.g., 'parent' or 'sitter'
     },
     profilePic: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     location: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     numberOfChildren: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: true,
     },
   }, {
@@ -56,8 +57,9 @@ export default (sequelize) => {
     },
   });
 
-  return User;
-};
+
+  
+export default User;
 
 // Sequelize-based functions for user operations
 export const createUser = async ({ name, email, password, role, profilePic, location, numberOfChildren }) => {

@@ -1,60 +1,67 @@
-import { Sequelize } from 'sequelize';
+import { DataTypes } from 'sequelize';
+import { sequelize } from './index.js';
+import bcrypt from 'bcryptjs';
 
-export default (sequelize) => {
-  const Sitter = sequelize.define('sitter', {
-    id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
+const Sitter = sequelize.define('sitter', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'Users',
+      key: 'id',
     },
-    name: {
-      type: Sequelize.STRING,
-      allowNull: false,
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  experience: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  location: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  availability: {
+    type: DataTypes.JSON,
+    allowNull: true,
+  },
+  profilePic: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+}, {
+  timestamps: false,
+  tableName: 'sitters',
+  hooks: {
+    beforeCreate: async (sitter) => {
+      if (sitter.password) {
+        const salt = await bcrypt.genSalt(10);
+        sitter.password = await bcrypt.hash(sitter.password, salt);
+      }
     },
-    email: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      // to Ensure email uniqueness
-      unique: true, 
+    beforeUpdate: async (sitter) => {
+      if (sitter.password) {
+        const salt = await bcrypt.genSalt(10);
+        sitter.password = await bcrypt.hash(sitter.password, salt);
+      }
     },
-    password: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    experience: {
-      type: Sequelize.STRING,
-      allowNull: true,
-    },
-    location: {
-      type: Sequelize.STRING,
-      allowNull: true,
-    },
-    availability: {
-      type: Sequelize.JSON,
-      allowNull: true,
-    },
-    profilePic: {
-      type: Sequelize.STRING,
-      allowNull: true,
-    },
-  }, {
-    timestamps: false,
-    tableName: 'sitters',
-    hooks: {
-      beforeCreate: async (sitter) => {
-        if (sitter.password) {
-          const salt = await import('bcryptjs').then(({ default: bcrypt }) => bcrypt.genSalt(10));
-          sitter.password = await import('bcryptjs').then(({ default: bcrypt }) => bcrypt.hash(sitter.password, salt));
-        }
-      },
-      beforeUpdate: async (sitter) => {
-        if (sitter.password) {
-          const salt = await import('bcryptjs').then(({ default: bcrypt }) => bcrypt.genSalt(10));
-          sitter.password = await import('bcryptjs').then(({ default: bcrypt }) => bcrypt.hash(sitter.password, salt));
-        }
-      },
-    },
-  });
+  },
+});
 
-  return Sitter;
-};
+export default Sitter;
