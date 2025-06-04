@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'Sitter_Project_2025_TechCrush_Group17_@#Xf93kL';
+// const JWT_SECRET = process.env.JWT_SECRET || 'Sitter_Project_2025_TechCrush_Group17_@#Xf93kL';
 
 export const generateToken = (user) => {
   return jwt.sign(
