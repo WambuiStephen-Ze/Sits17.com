@@ -1,7 +1,7 @@
 // backend/server.js
 import dotenv from 'dotenv';
-import { connectDB}  from './config/db.js';
-import { sequelize } from './models/index.js';
+// import { }  from './models/index.js';
+import { sequelize, connectDB } from './models/index.js';
 import app from './app.js';
 
 dotenv.config(); 

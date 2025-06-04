@@ -36,8 +36,11 @@ const Booking = sequelize.define('Booking', {
   timestamps: true,
 });
 
-// Relationships
-User.hasMany(Booking, { foreignKey: 'userId' });
-Booking.belongsTo(User, { foreignKey: 'userId' });
+// // Relationships
+// Booking.belongsTo(User, { as: 'parent', foreignKey: 'userId' });  // Parent making the booking
+// Booking.belongsTo(User, { as: 'sitter', foreignKey: 'sitterId' }); // Sitter being booked
+
+// User.hasMany(Booking, { as: 'parentBookings', foreignKey: 'userId' });
+// User.hasMany(Booking, { as: 'sitterBookings', foreignKey: 'sitterId' });
 
 export default Booking;

@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { createUser, getUserById, updateUser } from '../models/userModel.js';
+import { createUser, getUserById, updateUser } from '../services/userService.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 

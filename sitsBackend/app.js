@@ -12,21 +12,20 @@ import bookingRoutes from './routes/bookingRoutes.js';
 import emailRoutes from './routes/emailRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 // import stripe from 'stripe';
-const stripeClient = stripe(process.env.STRIPE_SECRET_KEY);
+// const stripeClient = stripe(process.env.STRIPE_SECRET_KEY);
 
 dotenv.config();
 
 // Import routes
-import bookingRoutes from './routes/bookingRoutes.js';
-import userRoutes from './routes/userRoutes.js';
-import sitterRoutes from './routes/sitterRoutes.js';
-import emailRoutes from './routes/emailRoutes.js';
-import dotenv from 'dotenv';
-dotenv.config();
+// import bookingRoutes from './routes/bookingRoutes.js';
+// import userRoutes from './routes/userRoutes.js';
+// import sitterRoutes from './routes/sitterRoutes.js';
+// import emailRoutes from './routes/emailRoutes.js';
+// import dotenv from 'dotenv';
+// dotenv.config();
 
 const zoomToken = process.env.ZOOM_JWT_TOKEN;
 
-process.env.STRIPE_SECRET_KEY;
 const app = express();
 
 // Connect to the database

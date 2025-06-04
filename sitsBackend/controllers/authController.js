@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { getUserByEmail, createUser } from '../models/userModel.js';
+import { getUserByEmail, createUser } from '../services/userService.js';
 
 dotenv.config();
 

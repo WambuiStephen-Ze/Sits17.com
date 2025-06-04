@@ -1,20 +1,20 @@
-import Sequelize  from 'sequelize';
+import sequelize  from '../config/db.js';
 import dotenv from 'dotenv';
 
 
 
 dotenv.config();
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASS,
-  {
-    host: process.env.DB_HOST,
-    dialect: 'mysql',
-    logging: false,
-  }
-);
+// const sequelize = new Sequelize(
+//   process.env.DB_NAME,
+//   process.env.DB_USER,
+//   process.env.DB_PASS,
+//   {
+//     host: process.env.DB_HOST,
+//     dialect: 'mysql',
+//     logging: false,
+//   }
+// );
 
 import User from './userModel.js';
 import Sitter from './sitter.js';
@@ -23,10 +23,11 @@ import Booking from './booking.js';
 
 // Define relationships
 User.hasMany(Sitter, { foreignKey: 'userId', as: 'sitters' });
-Sitter.belongsTo(User, { foreignKey: 'userId', as: 'user' });
-
 User.hasMany(Booking, { foreignKey: 'userId', as: 'bookings' });
+
+Sitter.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 Sitter.hasMany(Booking, { foreignKey: 'sitterId', as: 'bookings' });
+
 Booking.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 Booking.belongsTo(Sitter, { foreignKey: 'sitterId', as: 'sitter' });
 
@@ -182,4 +183,19 @@ const updateSitter = async (id, updates) => {
   }
 };
 
-export { sequelize, connectDB, User, Sitter, Booking, createUser, getUserById, getUserByEmail, updateUser, createBooking, getBookingById, updateBooking, getAllSitters, getSitterById, updateSitter };
+export { 
+  sequelize,
+  connectDB,
+  User,
+  Sitter,
+  Booking,
+  createUser, 
+  getUserById, 
+  getUserByEmail, 
+  updateUser, 
+  createBooking, 
+  getBookingById, 
+  updateBooking, 
+  getAllSitters, 
+  getSitterById, 
+  updateSitter };
