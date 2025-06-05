@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // import { sequelize, connectDB, User } from '../models/index.js';
 import Sequelize  from 'sequelize';
 import dotenv from 'dotenv';
@@ -12,6 +11,8 @@ const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
   process.env.DB_PASS,
+  // process.env.DB_PORT,
+  // process.env.DB_SSL,
   {
     host: process.env.DB_HOST,
     dialect: 'mysql',
@@ -19,9 +20,6 @@ const sequelize = new Sequelize(
   }
 );
 
-=======
-import { sequelize, connectDB, User } from '../models/index.js';
->>>>>>> 0cbaadcae15f56d7d23e4df7d75a52e74b14a243
 
 // Functions to interact with the User table using Sequelize
 export async function getUsers() {
@@ -33,10 +31,7 @@ export async function getUsers() {
   }
 }
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 0cbaadcae15f56d7d23e4df7d75a52e74b14a243
 export async function getUser(id) {
   try {
     const user = await User.findByPk(id);
@@ -56,8 +51,4 @@ export async function createUser(name, email, password, location, numberOfChildr
   }
 }
 
-<<<<<<< HEAD
 export default sequelize;
-=======
-export { sequelize, connectDB, User };
->>>>>>> 0cbaadcae15f56d7d23e4df7d75a52e74b14a243

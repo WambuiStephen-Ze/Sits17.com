@@ -4,10 +4,10 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // to Ensure JWT_SECRET is available
-const JWT_SECRET = process.env.JWT_SECRET;
-if (!JWT_SECRET) {
-  throw new Error('JWT_SECRET is not defined in environment variables');
-}
+// const JWT_SECRET = process.env.JWT_SECRET;
+// if (!JWT_SECRET) {
+//   throw new Error('JWT_SECRET is not defined in environment variables');
+// }
 
 // Middleware to protect routes by verifying JWT token
 const protect = (req, res, next) => {

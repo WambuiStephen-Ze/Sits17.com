@@ -6,39 +6,23 @@ import dotenv from 'dotenv';
 import { getUsers, getUser, createUser } from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import sitterRoutes from './routes/sitterRoutes.js';
-<<<<<<< HEAD
 import { connectDB, User, Sitter, Booking } from './models/index.js';
-=======
-import { connectDB } from './models/index.js';
->>>>>>> 0cbaadcae15f56d7d23e4df7d75a52e74b14a243
 import { registerSitter, getAllSitters, getSitterById,updateSitter } from './controllers/sitterController.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import emailRoutes from './routes/emailRoutes.js';
 import authRoutes from './routes/authRoutes.js';
-<<<<<<< HEAD
 // import stripe from 'stripe';
 // const stripeClient = stripe(process.env.STRIPE_SECRET_KEY);
-=======
->>>>>>> 0cbaadcae15f56d7d23e4df7d75a52e74b14a243
 
 dotenv.config();
 
 // Import routes
-<<<<<<< HEAD
 // import bookingRoutes from './routes/bookingRoutes.js';
 // import userRoutes from './routes/userRoutes.js';
 // import sitterRoutes from './routes/sitterRoutes.js';
 // import emailRoutes from './routes/emailRoutes.js';
 // import dotenv from 'dotenv';
 // dotenv.config();
-=======
-import bookingRoutes from './routes/bookingRoutes.js';
-import userRoutes from './routes/userRoutes.js';
-import sitterRoutes from './routes/sitterRoutes.js';
-import emailRoutes from './routes/emailRoutes.js';
-import dotenv from 'dotenv';
-dotenv.config();
->>>>>>> 0cbaadcae15f56d7d23e4df7d75a52e74b14a243
 
 const zoomToken = process.env.ZOOM_JWT_TOKEN;
 
@@ -81,7 +65,6 @@ app.post('/users', async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
 // STRIPE 
 app.post('/payment', async (req, res) => {
   const session = await stripe.payment.sessions .create;
@@ -101,8 +84,6 @@ app.post('/payment', async (req, res) => {
 
 })
 
-=======
->>>>>>> 0cbaadcae15f56d7d23e4df7d75a52e74b14a243
 // Other Routes
 app.use('/api/users', userRoutes);
 app.use('/api/sitters', sitterRoutes);
