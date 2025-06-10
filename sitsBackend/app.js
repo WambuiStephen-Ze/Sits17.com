@@ -11,18 +11,16 @@ import { registerSitter, getAllSitters, getSitterById,updateSitter } from './con
 import bookingRoutes from './routes/bookingRoutes.js';
 import emailRoutes from './routes/emailRoutes.js';
 import authRoutes from './routes/authRoutes.js';
-// import stripe from 'stripe';
-// const stripeClient = stripe(process.env.STRIPE_SECRET_KEY);
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
-// Import routes
-// import bookingRoutes from './routes/bookingRoutes.js';
-// import userRoutes from './routes/userRoutes.js';
-// import sitterRoutes from './routes/sitterRoutes.js';
-// import emailRoutes from './routes/emailRoutes.js';
-// import dotenv from 'dotenv';
-// dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
+
 
 const zoomToken = process.env.ZOOM_JWT_TOKEN;
 
@@ -35,8 +33,12 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, '../Frontend')));
 
-// Routes for Users (replacing Notes)
+
+
+
+// Routes for Users 
 app.get('/users', async (req, res) => {
   try {
     const users = await getUsers();
@@ -65,24 +67,6 @@ app.post('/users', async (req, res) => {
   }
 });
 
-// STRIPE 
-app.post('/payment', async (req, res) => {
-  const session = await stripe.payment.sessions .create;
-  line_items: [
-    {
-      price_deta: {
-        currency: 'Nigerian Naira',
-        product_data: {
-          name: 'form name'
-        }
-      }
-    }
-  ]
-  mode: 'payment',
-  success_url, 'http://localhost:3000/pay',
-  cancel_url,'http://localhost:3000/cancel'
-
-})
 
 // Other Routes
 app.use('/api/users', userRoutes);
@@ -98,15 +82,28 @@ app.get('/sitters', getAllSitters);
 app.get('/sitters/:id', getSitterById);
 app.put('/sitters/:id', updateSitter);
 
-// Root Route
-app.get('/', (req, res) => {
-  res.send('App is running!');
-});
+// // Root Route
+// app.get('/', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../Frontend', 'index.html'));
+// });
 
+//verifying the CORS configuration 
+// app.use(cors({
+//   origin: 'http://localhost:5500/index.html', //frontend html 
+//   credentials: true
+// }));
 // Global Error Handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something went wrong!');
+});
+
+app.get('/api/payment-details', (req, res) => {
+  res.json({
+    companyName: "Mata2Me Ltd",
+    paybill: "123456",
+    accountNumber: "M2M-001"
+  });
 });
 
 

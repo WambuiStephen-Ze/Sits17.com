@@ -1,10 +1,6 @@
 # Roor-level project overview
 
 run npm install to install all dependencies
-<<<<<<< HEAD
-# Roor-level project overview
-=======
->>>>>>> 0cbaadcae15f56d7d23e4df7d75a52e74b14a243
 
 # Developer 1: Database & Models
 # Task 1: Database Design
