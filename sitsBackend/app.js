@@ -11,6 +11,8 @@ import { registerSitter, getAllSitters, getSitterById,updateSitter } from './con
 import bookingRoutes from './routes/bookingRoutes.js';
 import emailRoutes from './routes/emailRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 // import stripe from 'stripe';
 // const stripeClient = stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -28,6 +30,12 @@ const zoomToken = process.env.ZOOM_JWT_TOKEN;
 
 const app = express();
 
+
+// For __dirname in ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
 // Connect to the database
 connectDB();
 
@@ -35,6 +43,9 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//Serve static files (e.g. CSS, JS)
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes for Users (replacing Notes)
 app.get('/users', async (req, res) => {
@@ -100,8 +111,21 @@ app.put('/sitters/:id', updateSitter);
 
 // Root Route
 app.get('/', (req, res) => {
-  res.send('App is running!');
+  res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
+
+// Serve register.html when accessing /register
+app.get('/register', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'register.html'));
+});
+
+
+// Serve register.html when accessing /register
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'login.html'));
+});
+
+
 
 // Global Error Handling
 app.use((err, req, res, next) => {

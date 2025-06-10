@@ -14,11 +14,11 @@ const generateToken = (user) => {
 
 export const registerParent = async (req, res) => {
   try {
-    const { name, email, password, role = 'parent', profilePic, location, numberOfChildren } = req.body;
+    const { firstname, lastname, email, password, role = 'parent', profilePic, location, numberOfChildren } = req.body;
 
     // Validate required fields
     if (!name || !email || !password) {
-      return res.status(400).json({ message: 'Name, email, and password are required' });
+      return res.status(400).json({ message: 'first name, last name, email, and password are required' });
     }
 
     // Check if user already exists
@@ -32,7 +32,10 @@ export const registerParent = async (req, res) => {
 
     // Create user
     const user = await createUser({
-      name,
+      firstname,
+      lastname,
+      username,
+      contact,
       email,
       password: hashedPassword,
       role,
