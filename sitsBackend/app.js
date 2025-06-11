@@ -13,6 +13,11 @@ import emailRoutes from './routes/emailRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+<<<<<<< HEAD
+=======
+// import stripe from 'stripe';
+// const stripeClient = stripe(process.env.STRIPE_SECRET_KEY);
+>>>>>>> 993fceea7e91d0692fc853078d95ea0217a85b4e
 
 dotenv.config();
 
@@ -26,6 +31,12 @@ const zoomToken = process.env.ZOOM_JWT_TOKEN;
 
 const app = express();
 
+
+// For __dirname in ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
 // Connect to the database
 connectDB();
 
@@ -35,10 +46,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../Frontend')));
 
+<<<<<<< HEAD
 
 
 
 // Routes for Users 
+=======
+//Serve static files (e.g. CSS, JS)
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Routes for Users (replacing Notes)
+>>>>>>> 993fceea7e91d0692fc853078d95ea0217a85b4e
 app.get('/users', async (req, res) => {
   try {
     const users = await getUsers();
@@ -82,6 +100,7 @@ app.get('/sitters', getAllSitters);
 app.get('/sitters/:id', getSitterById);
 app.put('/sitters/:id', updateSitter);
 
+<<<<<<< HEAD
 // // Root Route
 // app.get('/', (req, res) => {
 //   res.sendFile(path.join(__dirname, '../Frontend', 'index.html'));
@@ -92,6 +111,26 @@ app.put('/sitters/:id', updateSitter);
 //   origin: 'http://localhost:5500/index.html', //frontend html 
 //   credentials: true
 // }));
+=======
+// Root Route
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
+
+// Serve register.html when accessing /register
+app.get('/register', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'register.html'));
+});
+
+
+// Serve register.html when accessing /register
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'login.html'));
+});
+
+
+
+>>>>>>> 993fceea7e91d0692fc853078d95ea0217a85b4e
 // Global Error Handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
