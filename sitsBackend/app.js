@@ -1,5 +1,3 @@
-
-
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -7,7 +5,6 @@ import { getUsers, getUser, createUser } from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import sitterRoutes from './routes/sitterRoutes.js';
 import { connectDB} from './models/index.js';
-
 import { registerSitter, getAllSitters, getSitterById, updateSitter } from './controllers/sitterController.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import emailRoutes from './routes/emailRoutes.js';
@@ -96,24 +93,14 @@ app.get('/register', (req, res) => {
 
 // Define POST /register
 // ... (previous imports and setup remain the same)
-
 app.post('/register', async (req, res) => {
   console.log('Request headers:', req.headers);
   console.log('Request body:', req.body);
   console.log('Content-Type:', req.get('Content-Type'));
 
-  // Handle both URL-encoded and JSON bodies
-  let body = req.body || {};
-  if (req.get('Content-Type')?.includes('application/json')) {
-    body = req.body;
-  } else if (req.get('Content-Type')?.includes('application/x-www-form-urlencoded')) {
-    body = req.body;
-  } else {
-    console.warn('Unexpected Content-Type:', req.get('Content-Type'));
-  }
-
   const {
-    name,
+    firstname,
+    lastname,
     email,
     contact,
     username,
@@ -123,10 +110,12 @@ app.post('/register', async (req, res) => {
     numberOfChildren,
     role,
     profilePic,
-  } = body;
+  } = req.body;
 
-  const requiredFields = { name, email, password };
-  if (Object.values(requiredFields).some(field => !field)) {
+  const name = `${firstname} ${lastname}`;
+
+  // Validate required fields
+  if (!name || !email || !password) {
     return res.status(400).json({ message: 'name, email, and password are required' });
   }
 
@@ -135,13 +124,25 @@ app.post('/register', async (req, res) => {
   }
 
   try {
-    const newUser = await createUser(name, email, contact, password, location, numberOfChildren, role, profilePic || 0);
+    const newUser = await createUser({
+      name,
+      email,
+      contact,
+      username,
+      password,
+      location,
+      numberOfChildren,
+      role,
+      profilePic: profilePic || null,
+    });
+
     res.status(201).json({ message: 'User registered successfully', user: newUser });
   } catch (error) {
     console.error('Registration error:', error);
-    res.status(500).json({ message: 'Something went wrong during registration' });
+    res.status(500).json({ message: error.message });
   }
 });
+
 
 // ... (rest of the file remains the same)
 
