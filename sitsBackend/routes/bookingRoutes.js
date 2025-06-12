@@ -1,7 +1,8 @@
 import express from 'express';
 import protect from '../middlewares/authMiddleware.js';
 console.log('Middleware loaded:', protect);
-import { Booking, Sitter, User, createBooking, getBookingById, updateBooking } from '../models/index.js';
+import {  createBooking, getBookingById, updateBooking } from '../models/index.js';
+import { Sitter } from '../models/index.js';
 import nodemailer from 'nodemailer';
 
 const router = express.Router();

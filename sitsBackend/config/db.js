@@ -1,18 +1,16 @@
-// import { sequelize, connectDB, User } from '../models/index.js';
-import Sequelize  from 'sequelize';
+// services/userService.js
+
+import { Sequelize } from 'sequelize';
+import userModel from '../models/userModel.js'; //  Make sure the extension is .js
 import dotenv from 'dotenv';
-
-
-
 
 dotenv.config();
 
-const sequelize = new Sequelize(
+// Connect to the database
+export const dbConfig = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
   process.env.DB_PASS,
-  process.env.DB_PORT,
-  // process.env.DB_SSL,
   {
     host: process.env.DB_HOST,
     dialect: 'mysql',
@@ -20,18 +18,24 @@ const sequelize = new Sequelize(
   }
 );
 
+//  Initialize User model
+const User = userModel(dbConfig);
 
-// Functions to interact with the User table using Sequelize
+//  Optional: test connection
+dbConfig.authenticate()
+  .then(() => console.log('DB connection successful'))
+  .catch((err) => console.error('DB connection failed:', err));
+
+//  Function to get all users
 export async function getUsers() {
   try {
-    const users = await User.findAll();
-    return users;
+    return await User.findAll();
   } catch (error) {
     throw new Error(`Error fetching users: ${error.message}`);
   }
 }
 
-
+//  Function to get a single user by ID
 export async function getUser(id) {
   try {
     const user = await User.findByPk(id);
@@ -42,13 +46,20 @@ export async function getUser(id) {
   }
 }
 
-export async function createUser(name, email, password, location, numberOfChildren) {
+//  Function to get a user by email (used in login/register)
+export async function getUserByEmail(email) {
   try {
-    const user = await User.create({ name, email, password, location, numberOfChildren });
-    return user;
+    return await User.findOne({ where: { email } });
+  } catch (error) {
+    throw new Error(`Error fetching user by email: ${error.message}`);
+  }
+}
+
+//  Function to create a user
+export async function createUser(userData) {
+  try {
+    return await User.create(userData); // Sequelize hook will hash password
   } catch (error) {
     throw new Error(`Error creating user: ${error.message}`);
   }
 }
-
-export default sequelize;

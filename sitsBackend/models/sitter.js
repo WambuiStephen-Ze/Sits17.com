@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from './index.js';
+import { sequelize } from '../models/index.js';
 import bcrypt from 'bcryptjs';
 
 const Sitter = sequelize.define('sitter', {

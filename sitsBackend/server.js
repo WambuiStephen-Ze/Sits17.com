@@ -1,8 +1,9 @@
 // backend/server.js
 import dotenv from 'dotenv';
-import { sequelize, connectDB } from './models/index.js';
+import { connectDB, sequelize } from './models/index.js';
 import app from './app.js';
 import express from 'express';
+// import { Sitter } from '../models/index.js';
 dotenv.config(); 
 const PORT = process.env.PORT || 3000;
 
@@ -21,6 +22,6 @@ const startServer = async () => {
 
 
 // Serve static assets from "frontend"
-app.use(express.static('/Sits17.com-BE/views'));
+app.use(express.static('../views'));
 
 startServer();

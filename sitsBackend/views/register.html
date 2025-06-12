@@ -3,72 +3,66 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
+    <title>Register</title>
     <link rel="stylesheet" href="styleregister.css" />
-    <script src="/Sits17.com-BE/public/register.js"></script>
-</body>
-</script>
+    <script src="/public/register.js" defer></script>
   </head>
   <body>
-        <header>
-      <nav class="navbar">
-        <img src="images/sit.com_logo.png" alt="logo">
-        <ul>
-          <li><a href="Index.html">Home</a></li>
-          <li><a href="/Home_Page/">About</a></li>
-          <li><a href="/Home_Page/">Contact</a></li>
-          <li><a href="/Home_Page/">Services</a></li>
-          <li><a href="/Home_Page/">Payment</a></li>
 
-      </nav>
-    </header>
     <div class="wrapper">
       <h1>Create your account</h1>
       <p>Please fill in this form to create an account!</p>
-      <form id="registerForm" method="POST" enctype="multipart/form-data">
->
-        <div class="input-box">
-          <input name="firstname" type="text" placeholder="Firstname" required />
-          <i class="bx bxs-user"></i>
+
+      <form id="registerForm" action="/register" method="POST" >
+       <div class="input-box">
+          <label for="firstname">First Name</label><br />
+          <input id="firstname" name="firstname" type="text" placeholder="Firstname" required />
         </div>
         <div class="input-box">
-          <input name="lastname" type="text" placeholder="Lastname" required />
-          <i class="bx bxs-user"></i>
+          <label for="lastname">Last Name</label><br />
+          <input id="lastname" name="lastname" type="text" placeholder="Lastname" required />
         </div>
         <div class="input-box">
-          <input name="email" type="email" placeholder="mail@example.com" required />
-          <i class="bx bxs-user"></i>
+          <label for="email">Email</label><br />
+          <input id="email" name="email" type="email" placeholder="mail@example.com" required />
         </div>
         <div class="input-box">
-          <input name="contact" type="number" placeholder="Phone number" required />
-          <i class="bx bxs-user"></i>
+          <label for="contact">Contact</label><br />
+          <input id="contact" name="contact" type="number" placeholder="Phone number" required />
         </div>
         <div class="input-box">
-          <input name="username" type="text" placeholder="Username" required />
-          <i class="bx bxs-user"></i>
+          <label for="username">Username</label><br />
+          <input id="username" name="username" type="text" placeholder="Username" required />
         </div>
         <div class="input-box">
-          <input name="password" type="text" placeholder="Password" required />
+          <label for="password">Password</label><br />
+          <input id="password" name="password" type="password" placeholder="Password" required />
         </div>
         <div class="input-box">
-          <input type="text" placeholder="Confirm Password" required />
-          <i class="bx bxs-user"></i>
+          <label for="confirmPassword">Confirm Password</label><br />
+          <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password" required />
         </div>
         <div class="input-box">
-          <input name="location" type="text" placeholder="location" required />
-          <i class="bx bxs-user"></i>
+          <label for="location">Location</label><br />
+          <input id="location" name="location" type="text" placeholder="Location" required />
         </div>
         <div class="input-box">
-          <input name="numberOfChildren" type="number" min="0"  required />
-          <i class="bx bxs-user"></i>
+          <label for="numberOfChildren">Number Of Children</label><br />
+          <input id="numberOfChildren" name="numberOfChildren" type="number" min="0" placeholder="Number of Children" required />
         </div>
         <div class="input-box">
-          <input name="profilePic" type="file" placeholder="upload your profile pix" required />
-          <i class="bx bxs-user"></i>
+          <label>Who are you?</label><br />
+          <label><input type="radio" name="role" value="parent" required> Parent</label>
+          <label><input type="radio" name="role" value="sitter" required> Sitter</label>
         </div>
+        <div class="input-box">
+          <label for="profilePic">Profile Picture</label><br />
+          <input id="profilePic" name="profilePic" type="file" placeholder="Picture" required />
+        </div>
+
         <button type="submit" class="btn">Sign Up</button>
         <div class="register-link">
-          <p>Already have an account?<a href="login">Log In</a></p>
+          <p>Already have an account? <a href="login">Log In</a></p>
         </div>
       </form>
     </div>

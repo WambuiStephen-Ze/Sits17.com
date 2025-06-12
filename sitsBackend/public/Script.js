@@ -19,6 +19,19 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData);
+  const response = await fetch('/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  const result = await response.json();
+  console.log(result);
+});
+
 /*document.addEventListener('DOMContentLoaded', function() {
     
     const navToggle = document.createElement('button');

@@ -1,56 +1,33 @@
-import sequelize  from '../config/db.js';
+
+import {dbConfig} from '../config/db.js';
 import dotenv from 'dotenv';
-
-
+import { initializeModels} from './init.js';
 
 dotenv.config();
 
-// const sequelize = new Sequelize(
-//   process.env.DB_NAME,
-//   process.env.DB_USER,
-//   process.env.DB_PASS,
-//   {
-//     host: process.env.DB_HOST,
-//     dialect: 'mysql',
-//     logging: false,
-//   }
-// );
-
-import User from './userModel.js';
-import Sitter from './sitter.js';
-import Booking from './booking.js';
-
-
-// Define relationships
-User.hasMany(Sitter, { foreignKey: 'userId', as: 'sitters' });
-User.hasMany(Booking, { foreignKey: 'userId', as: 'bookings' });
-
-Sitter.belongsTo(User, { foreignKey: 'userId', as: 'user' });
-Sitter.hasMany(Booking, { foreignKey: 'sitterId', as: 'bookings' });
-
-Booking.belongsTo(User, { foreignKey: 'userId', as: 'user' });
-Booking.belongsTo(Sitter, { foreignKey: 'sitterId', as: 'sitter' });
+const sequelize = dbConfig;
 
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
     console.log('MySQL connected successfully');
+    await sequelize.sync();
   } catch (err) {
     console.error('Database connection failed:', err);
   }
 };
 
-(async () => {
-  await sequelize.sync();
-})();
+const { User, Sitter, Booking } = initializeModels(sequelize);
 
-// User operation functions
-const createUser = async ({ name, email, password, role, profilePic, location, numberOfChildren }) => {
+const createUser = async ({ firstname, lastname, email, username, password, contact, role, profilePic, location, numberOfChildren }) => {
   try {
     const user = await User.create({
-      name,
+      firstname, 
+      lastname,
       email,
+      username,
       password,
+      contact,
       role,
       profilePic,
       location,
@@ -58,8 +35,11 @@ const createUser = async ({ name, email, password, role, profilePic, location, n
     });
     return {
       id: user.id,
-      name: user.name,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      username: user.username,
       email: user.email,
+      contact: user.contact,
       role: user.role,
       profilePic: user.profilePic,
       location: user.location,
@@ -183,19 +163,7 @@ const updateSitter = async (id, updates) => {
   }
 };
 
-export { 
-  sequelize,
-  connectDB,
-  User,
-  Sitter,
-  Booking,
-  createUser, 
-  getUserById, 
-  getUserByEmail, 
-  updateUser, 
-  createBooking, 
-  getBookingById, 
-  updateBooking, 
-  getAllSitters, 
-  getSitterById, 
-  updateSitter };
+
+
+// Export functions and models
+export { sequelize, connectDB, User, Sitter, Booking, createUser, getUserById, getUserByEmail, updateUser, createBooking, getBookingById, updateBooking, getAllSitters, getSitterById, updateSitter };

@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from './index.js'; // Import the instantiated sequelize instance
+import { sequelize } from '../models/index.js'; // Import the instantiated sequelize instance
 import User from './userModel.js';
 import Sitter from './sitter.js';
 

@@ -1,11 +1,10 @@
 import User from '../models/userModel.js'
 // Sequelize-based functions for user operations
-export const createUser = async ({ firstname, lastname, username, contact, email, password, role, profilePic, location, numberOfChildren }) => {
+export const createUser = async ({ name, username, contact, email, password, role, profilePic, location, numberOfChildren }) => {
   const { User } = await import('../models/index.js'); // Dynamic import to avoid circular dependency
   try {
     const user = await User.create({
-      firstname,
-      lastname,
+      name,
       username,
       contact,
       email,
