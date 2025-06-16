@@ -3,7 +3,7 @@
 import { Sequelize } from 'sequelize';
 import userModel from '../models/userModel.js'; //  Make sure the extension is .js
 import dotenv from 'dotenv';
-
+import { User } from '../models/index.js';
 dotenv.config();
 
 // Connect to the database
@@ -18,8 +18,6 @@ export const dbConfig = new Sequelize(
   }
 );
 
-//  Initialize User model
-const User = userModel(dbConfig);
 
 //  Optional: test connection
 dbConfig.authenticate()
@@ -63,3 +61,4 @@ export async function createUser(userData) {
     throw new Error(`Error creating user: ${error.message}`);
   }
 }
+

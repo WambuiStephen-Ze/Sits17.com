@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { getUsers, getUser, createUser } from './config/db.js';
+import { getUsers, getUser, createUser, getUserByEmail } from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import sitterRoutes from './routes/sitterRoutes.js';
 import { connectDB} from './models/index.js';
@@ -13,6 +13,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
 import bodyParser from 'body-parser';
+import bcrypt from 'bcrypt';
 
 dotenv.config();
 
@@ -149,6 +150,35 @@ app.post('/register', async (req, res) => {
 // Serve login.html when accessing /login
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'login.html'));
+});
+
+//login route
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  // Validate presence
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email and password are required.' });
+  }
+
+  try {
+    // Fetch user from DB
+    const user = await getUserByEmail(email);
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password.' });
+    }
+
+    // Compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid email or password.' });
+    }
+
+    res.status(200).json({ message: 'Login successful', user });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'Server error during login.' });
+  }
 });
 
 // Global Error Handling
