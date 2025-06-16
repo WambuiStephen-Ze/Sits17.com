@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import { getUserByEmail } from '../services/userService.js';
 import { createUser, getUserById, updateUser } from '../services/userService.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
@@ -7,17 +8,17 @@ dotenv.config();
 
 // Generate JWT token
 const generateToken = (user) => {
-  return jwt.sign({ id: user.id, email: user.email, role: user.role }, process.env.JWT_SECRET, {
+  return jwt.sign({ id: user.id, email: user.email,  }, process.env.JWT_SECRET, {
     expiresIn: '1h',
   });
 };
 
 export const registerParent = async (req, res) => {
   try {
-    const { firstname, lastname, email, password, role = 'parent', profilePic, location, numberOfChildren } = req.body;
+    const { firstname, lastname, email, password, profilePic, location, numberOfChildren } = req.body;
 
     // Validate required fields
-    if (!name || !email || !password) {
+    if (!firstname || !email || !password) {
       return res.status(400).json({ message: 'first name, last name, email, and password are required' });
     }
 
@@ -38,7 +39,6 @@ export const registerParent = async (req, res) => {
       contact,
       email,
       password: hashedPassword,
-      role,
       profilePic,
       location,
       numberOfChildren,
@@ -54,6 +54,42 @@ export const registerParent = async (req, res) => {
   }
 };
 
+//login user
+
+
+export const loginParent = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await getUserByEmail(email); // corrected function name
+    if (!user) {
+      return res.status(404).json({ message: 'Invalid email or password' });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
+      expiresIn: '7d',
+    });
+
+    res.json({
+      id: user.id,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      token,
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+
+//getting users
 export const getUser = async (req, res) => {
   try {
     const user = await getUserById(req.params.id);
@@ -65,6 +101,7 @@ export const getUser = async (req, res) => {
   }
 };
 
+//updating user data
 export const updateUserData = async (req, res) => {
   try {
     const user = await getUserById(req.params.id);

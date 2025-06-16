@@ -5,7 +5,8 @@ import { getUsers, getUser, createUser } from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import sitterRoutes from './routes/sitterRoutes.js';
 import { connectDB} from './models/index.js';
-import { registerSitter, getAllSitters, getSitterById, updateSitter } from './controllers/sitterController.js';
+import booking from './models/booking.js'
+import { registerSitter, getAllSitters, getSitterById, updateSitter, loginSitter } from './controllers/sitterController.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import emailRoutes from './routes/emailRoutes.js';
 import authRoutes from './routes/authRoutes.js';
@@ -13,6 +14,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
 import bodyParser from 'body-parser';
+import { loginParent } from './controllers/userController.js';
 
 dotenv.config();
 
@@ -30,6 +32,8 @@ connectDB();
 // Middleware
 app.use(cors());
 app.use(express.json()); // Parse JSON bodies
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 const storage = multer.memoryStorage(); // Store file in memory (or use diskStorage for files)
@@ -72,8 +76,7 @@ app.use('/api/sitters', sitterRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/sendConfirmation', emailRoutes);
 app.use('/api/authenticate', authRoutes);
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+
 
 // Sitter Routes
 app.post('/sitters', registerSitter);
@@ -81,10 +84,58 @@ app.get('/sitters', getAllSitters);
 app.get('/sitters/:id', getSitterById);
 app.put('/sitters/:id', updateSitter);
 
+
+// Add sitter route with multer
+app.post('/sitters', upload.single('profilePic'), async (req, res) => {
+  try {
+    const { email, password, location, availability } = req.body;
+    const profilePic = req.file ? req.file.buffer.toString('base64') : null;
+
+    if (!email || !password || !location) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    // Assuming Sitter.create is defined in models
+    const newSitter = await Sitter.create({
+     
+      firstname,
+      lastname,
+      email,
+      contact,
+      password,
+      location,
+      availability,
+      sitterId,
+      profilePic,
+    });
+
+    res.status(201).json({ message: 'Sitter registered successfully', sitter: newSitter });
+  } catch (error) {
+    console.error('Error registering sitter:', error);
+    res.status(500).json({ message: 'Sitter registration failed', error: error.message });
+  }
+});
+
 // Root Route
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
+
+// Serve login.html when accessing /loginParent
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'login.html'));
+});
+app.get('/loginSitter', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'login.html'));
+});
+
+//login 
+app.post('/api/login', loginParent);
+app.post('/api/loginSitter', loginSitter);
+// Serve login.html when accessing /loginSitter
+// app.get('/loginSitter', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'views', 'login.html'));
+// });
 
 // Serve register.html when accessing /register
 app.get('/register', (req, res) => {
@@ -92,7 +143,6 @@ app.get('/register', (req, res) => {
 });
 
 // Define POST /register
-// ... (previous imports and setup remain the same)
 app.post('/register', async (req, res) => {
   console.log('Request headers:', req.headers);
   console.log('Request body:', req.body);
@@ -108,7 +158,6 @@ app.post('/register', async (req, res) => {
     confirmPassword,
     location,
     numberOfChildren,
-    role,
     profilePic,
   } = req.body;
 
@@ -132,7 +181,7 @@ app.post('/register', async (req, res) => {
       password,
       location,
       numberOfChildren,
-      role,
+
       profilePic: profilePic || null,
     });
 
@@ -144,12 +193,31 @@ app.post('/register', async (req, res) => {
 });
 
 
-// ... (rest of the file remains the same)
 
-// Serve login.html when accessing /login
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'login.html'));
+
+//booking 
+app.post('/bookings', async (req, res) => {
+  try {
+    const { userId, bookedSitters, bookingDate, confirmationEmail } = req.body;
+
+    if (!userId || !bookedSitters || !bookingDate) {
+      return res.status(400).json({ message: 'Missing required booking information' });
+    }
+
+    const newBooking = await Booking.create({
+      userId,
+      bookedSitters,
+      bookingDate,
+      confirmationEmail: confirmationEmail ?? false,
+    });
+
+    return res.status(201).json({ message: 'Booking created successfully', booking: newBooking });
+  } catch (error) {
+    console.error('Error creating booking:', error);
+    return res.status(500).json({ message: 'Booking failed', error: error.message });
+  }
 });
+
 
 // Global Error Handling
 app.use((err, req, res, next) => {

@@ -1,22 +1,32 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../models/index.js';
+// import { sequelize } from '../models/index.js';
 import bcrypt from 'bcryptjs';
 
-const Sitter = sequelize.define('sitter', {
+
+export default (sequelize)=> {
+  return sequelize.define('sitter', {
+
+  // })
+// }
+// const Sitter = sequelize.define('sitter', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
   },
-  userId: {
-    type: DataTypes.INTEGER,
+  // sitterId: {
+  //   type: DataTypes.INTEGER,
+  //   allowNull: false,
+  //   references: {
+  //     model: 'Sitters',
+  //     key: 'id',
+  //   },
+  // },
+  firstname: {
+    type: DataTypes.STRING,
     allowNull: false,
-    references: {
-      model: 'Users',
-      key: 'id',
-    },
   },
-  name: {
+  lastname: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -63,5 +73,6 @@ const Sitter = sequelize.define('sitter', {
     },
   },
 });
+}
 
-export default Sitter;
+// export default Sitter;

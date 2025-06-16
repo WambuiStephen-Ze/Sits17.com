@@ -19,16 +19,14 @@ const connectDB = async () => {
 
 const { User, Sitter, Booking } = initializeModels(sequelize);
 
-const createUser = async ({ firstname, lastname, email, username, password, contact, role, profilePic, location, numberOfChildren }) => {
+const createUser = async ({ firstname, lastname, email, password, contact, profilePic, location, numberOfChildren }) => {
   try {
     const user = await User.create({
       firstname, 
       lastname,
       email,
-      username,
       password,
       contact,
-      role,
       profilePic,
       location,
       numberOfChildren,
@@ -37,10 +35,10 @@ const createUser = async ({ firstname, lastname, email, username, password, cont
       id: user.id,
       firstname: user.firstname,
       lastname: user.lastname,
-      username: user.username,
+      
       email: user.email,
       contact: user.contact,
-      role: user.role,
+      
       profilePic: user.profilePic,
       location: user.location,
       numberOfChildren: user.numberOfChildren,

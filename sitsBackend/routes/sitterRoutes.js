@@ -1,13 +1,18 @@
 import express from 'express';
 import { registerSitter } from '../controllers/sitterController.js';
 import protect from '../middlewares/authMiddleware.js';
-
+import { loginSitter } from '../controllers/sitterController.js';
 import { getAllSitters, getSitterById, updateSitter } from '../models/index.js';
 
 const router = express.Router();
 
 // Create a new sitter
 router.post('/register', registerSitter);
+
+
+
+// Login sitter
+router.post('/login', loginSitter);
 
 // Get all sitters
 router.get('/', async (req, res) => {

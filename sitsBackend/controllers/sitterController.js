@@ -52,6 +52,37 @@ export const registerSitter = async (req, res) => {
   }
 };
 
+//Login control
+export const loginSitter = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const sitter = await findSitterByEmail(email);
+    if (!sitter) {
+      return res.status(404).json({ message: 'Invalid email or password' });
+    }
+
+    const isMatch = await bcrypt.compare(password, sitter.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const token = jwt.sign({ id: sitter.id }, process.env.JWT_SECRET, {
+      expiresIn: '7d',
+    });
+
+    res.json({
+      id: sitter.id,
+      name: sitter.name,
+      email: sitter.email,
+      token,
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
 // Get all sitters
 export const getAllSitters = async (req, res) => {
   try {

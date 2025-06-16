@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../models/index.js'; // Import the instantiated sequelize instance
-import User from './userModel.js';
-import Sitter from './sitter.js';
+// import User from './userModel.js';
+// import Sitter from './sitter.js';
 
 // Use the sequelize instance to define the model (not Sequelize directly)
 const Booking = sequelize.define('Booking', {

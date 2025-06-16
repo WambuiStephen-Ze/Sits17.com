@@ -58,7 +58,7 @@ export const register = async (req, res) => {
 };
 
 // Login user
-export const loginUser = async (req, res) => {
+export const loginParent = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -91,6 +91,7 @@ export const loginUser = async (req, res) => {
       token,
     });
   } catch (err) {
+    console.log('User service loaded:', getUserByEmail);
     console.error('Login error:', err);
     res.status(500).json({ message: 'Login failed', error: err.message });
   }

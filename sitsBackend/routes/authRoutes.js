@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 import { createUser, getUserById, updateUser } from '../models/index.js';
 import protect from '../middlewares/authMiddleware.js';
-import { loginUser } from '../controllers/authController.js';
+import { loginParent } from '../controllers/authController.js';
 
 router.post('/register', async (req, res) => {
   try {
@@ -23,7 +23,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-router.post('/login', loginUser);
+router.post('/login', loginParent);
 router.post('/logout', protect, (req, res) => res.json({ message: 'Logout successful (client-side token removal)' }));
 router.post('/refresh', protect, (req, res) => {
   const token = jwt.sign({ id: req.user.id, email: req.user.email, role: req.user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
