@@ -5,7 +5,7 @@ import userModel from '../models/userModel.js'; //  Make sure the extension is .
 import sitter from '../models/sitter.js';
 // import Booking from '../models/booking.js';
 import dotenv from 'dotenv';
-
+import { User } from '../models/index.js';
 dotenv.config();
 
 // Connect to the database
@@ -20,10 +20,13 @@ export const dbConfig = new Sequelize(
   }
 );
 
+<<<<<<< HEAD
 //  Initialize User model
 const User = userModel(dbConfig);
 const Sitter = sitter(dbConfig);
 
+=======
+>>>>>>> f605a1ef3a876ae81b3300d15074812ac527ef95
 
 //  Optional: test connection
 dbConfig.authenticate()
@@ -68,6 +71,7 @@ export async function createUser(userData) {
   }
 }
 
+<<<<<<< HEAD
 //function to get all sitters
 export async function getSitters() {
   try {
@@ -106,3 +110,5 @@ export async function createSitter(userData) {
   }
 }
 
+=======
+>>>>>>> f605a1ef3a876ae81b3300d15074812ac527ef95
