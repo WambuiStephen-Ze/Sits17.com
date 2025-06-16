@@ -6,27 +6,26 @@
     <link rel="icon" href="images/sit.com_logo.png" type="image/png">
     <title>Sitter Platform</title>
     <link rel="stylesheet" href="styleindex.css">
-    <script src="script.js"></script>
 </head>
 <body>
-    <header>
-        <nav class="navbar">
-            <img src="images/sit.com_logo.png" alt="logo">
-            <div class="nav-toggle">
-            <ul id="nav-links">
-            <li><a href="Index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="services.html">Services</a></li>
-            <li><a href="payment.html">Payment</a></li>
-            </ul>
-            </div>
-            <h2>SITS.COM</h2>
-            <button onclick="location.href='#'">Book a sitter</button>
-        </nav>
-    </header>
+<header> 
+  <nav class="navbar">
+    <img src="images/sit.com_logo.png" alt="logo">
+    <div class="h2">
+    <h2>SITS.COM</h2> </div>
+    <div class="nav-toggle">
+    <button class="nav-toggle" onclick="toggleMenu()">☰</button></div>
+    <ul id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#AboutUs">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#Services">Services</a></li>
+      <li><a href="#">Payment</a></li>
+    </ul>
+  </nav>
+</header>
 
-    <main>
+<main>
     <section id="hero">
         <div class="hero-container">
             <img src="images/image1.jpg" alt=" A mother and her daughter dancing">
@@ -35,8 +34,8 @@
             <p>We do all the work <br>for your children</p>
             </div>
             <div class="hero-buttons">
-            <button class="btn1" onclick="location.href='register'"> Find a Sitter</button>
-            <button class="btn2" onclick="location.href='register'">I'm a Sitter</button>
+            <button class="btn1" onclick="location.href='login.html?role=parent'"> Find a Sitter</button>
+            <button class="btn2" onclick="location.href='login.html?role=sitter'">I'm a Sitter</button>
             </div>
         </div>
     </section>
@@ -157,22 +156,22 @@
         </h2>
 
         <div class="serve">
-                <h3> <img src="images/babyh.png" alt="" >In-Home Babysitting</h3>
+                <h3> <img src="images/babyh.png">In-Home Babysitting</h3>
                 <p>Enjoy peace of mind with our trusted sitters who <br>
                     care for your child right in the comfort of your home.
                 </p>
-                <h3> <img src="images/clock.png" alt="">Flexible Scheduling</h3>
+                <h3> <img src="images/clock.png">Flexible Scheduling</h3>
                 <p>Whether its's part-time, full-time, or just few hours, we offer <br>
                     babysitting services that fit seamlessly into your routine.
                 </p>
-                <h3> <img src="images/moon.png" alt="">Evening & Weekend Care</h3>
+                <h3> <img src="images/moon.png">Evening & Weekend Care</h3>
                 <p>Going out or working late? We've got you covered with reliable <br>
                     babysitters available nights, weekends, and even on short notice.
                 </p>
         </div>
         </div>
         <div class="btn4">
-        <button onclick=location.href="about.html">See More</button>
+        <button onclick="location.href='#Services'">See More</button>
         </div>
         </div>
     </section>
@@ -212,19 +211,19 @@
 
         <div class="links">
             <ul>
-                <li><a href="">About</a></li>
+                <li><a href="#AboutUs">About</a></li>
                 <li><a href="#">Blog</a></li>
-                <li><a href="#">Service</a></li>
-                <li><a href="#">Job</a></li>
+                <li><a href="#Services">Service</a></li>
+                <li><a href="#safety">Job</a></li>
             </ul>
         </div>
         <div class="links">
             <ul>
-                <li><a href="#">Company</a></li>
-                <li><a href="#">Our Team</a></li>
-                <li><a href="#">Job</a></li>
+                <li><a href="#Ourstory">Company</a></li>
+                <li><a href="#AboutUs">Our Team</a></li>
+                <li><a href="#safety">Job</a></li>
                 <li><a href="#">Blog</a></li>
-                <li><a href="#">About service</a></li>
+                <li><a href="#Services">About service</a></li>
             </ul>
         </div>
         <div class="subscribe">
@@ -233,19 +232,20 @@
                 <button class="btn9" type="Submit"> Subscribe</button><br>
             </form>
             <div class="socials">
-                <a href="#" class="twitter"><img src="./images/Twitter icon.png" alt="X"></a>
-                <a href="#"><img src="./images/Facebook.png" alt="Facebook"></a>
-                <a href="#"><img src="./images/Instagram_icon.png" alt="Instagram"></a>
-                <a href="#"><img src="./images/social-06-512.png" alt="Social"></a>
+                <a href="#" class="twitter"><img src="./images/Twitter icon.png" alt=""></a>
+                <a href="#"><img src="./images/Facebook.png"></a>
+                <a href="#"><img src="./images/Instagram_icon.png">
+                <a href="#"><img src="./images/social-06-512.png"></a>
 
             </div>
             <div class="payment">
                <a href="#"><img src="./images/amazon.png" alt="Amazon"></a>
-               <a href="#"><img src="./images/visa.png" alt="visa"></a>
+               <a href="#"><img src="./images/visa.png" alt="Visa"></a>
                <a href="#"><img src="./images/Apple_Pay.png" alt="Apple_Pay"></a>
                <a href="#"><img src="./images/mastercard.png" alt="mastercard"></a> 
             </div>
          </div>
     </footer>
+    <script src="script.js"></script>
 </body>
 </html>
