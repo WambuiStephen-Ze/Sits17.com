@@ -85,7 +85,7 @@ const createBooking = async ({ sitterId, userId, date }) => {
     const booking = await Booking.create({
       sitterId,
       userId,
-      date,
+      bookingDate: new Date(date),
       status: 'pending',
     });
     return {

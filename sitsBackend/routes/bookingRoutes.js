@@ -1,11 +1,28 @@
+//booking routes
 import express from 'express';
 import protect from '../middlewares/authMiddleware.js';
 console.log('Middleware loaded:', protect);
-import {  createBooking, getBookingById, updateBooking } from '../models/index.js';
+import { 
+  createBooking, 
+  getBookingById, 
+  updateBooking, 
+  getUserBookings, 
+  cancelBooking } from '../controllers/bookingController.js';
+
 import { Sitter } from '../models/index.js';
 import nodemailer from 'nodemailer';
 
 const router = express.Router();
+
+router.post('/', protect, createBooking);
+router.get('/:id', protect, getBookingById);
+router.put('/:id', protect, updateBooking);
+router.get('/user/:userId', protect, getUserBookings);
+
+// Cancel booking route
+router.put('/cancel/:id', protect, cancelBooking);
+
+
 
 // Configure Nodemailer transporter
 const transporter = nodemailer.createTransport({

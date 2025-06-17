@@ -1,7 +1,8 @@
+//sitter controller 
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { Sitter } from '../models/index.js';
+// import { Sitter } from '../models/index.js';
 
 dotenv.config();
 
@@ -15,10 +16,10 @@ const generateToken = (sitter) => {
 // Register a new sitter
 export const registerSitter = async (req, res) => {
   try {
-    const { name, email, password, profilePic, location, experience, availability } = req.body;
+    const { firstname, lastname, email, phone, password, profilePic, location, experience, availability } = req.body;
 
     // Validate required fields
-    if (!name || !email || !password) {
+    if ( !email || !password) {
       return res.status(400).json({ message: 'Name, email, and password are required' });
     }
 
@@ -33,8 +34,10 @@ export const registerSitter = async (req, res) => {
 
     // Create sitter
     const sitter = await Sitter.create({
-      name,
+      firstname,
+      lastname,
       email,
+      phone,
       password: hashedPassword,
       profilePic,
       location,
@@ -73,8 +76,8 @@ export const loginSitter = async (req, res) => {
 
     res.json({
       id: sitter.id,
-      name: sitter.name,
       email: sitter.email,
+      password: sitter.password,
       token,
     });
   } catch (error) {
@@ -106,6 +109,42 @@ export const getSitterById = async (req, res) => {
   }
 };
 
+//sitters status 
+import { Sitter, Booking } from '../models/index.js';
+import { Op } from 'sequelize';
+
+// Get sitter profile with booking status
+export const getSitterProfileWithStatus = async (req, res) => {
+  try {
+    const sitterId = req.params.id;
+
+    const sitter = await Sitter.findByPk(sitterId);
+    if (!sitter) {
+      return res.status(404).json({ message: 'Sitter not found' });
+    }
+
+    const activeBooking = await Booking.findOne({
+      where: {
+        sitterId,
+        status: {
+          [Op.in]: ['pending', 'confirmed'],
+        },
+      },
+    });
+
+    const sitterProfile = sitter.toJSON();
+    sitterProfile.isBooked = !!activeBooking;
+    sitterProfile.bookingStatus = activeBooking ? 'Booked' : 'Available';
+
+    res.status(200).json(sitterProfile);
+  } catch (err) {
+    console.error('Error fetching sitter profile with status:', err);
+    res.status(500).json({ message: 'Failed to fetch sitter profile', error: err.message });
+  }
+};
+
+
+
 // Update sitter profile
 export const updateSitter = async (req, res) => {
   try {
@@ -119,3 +158,4 @@ export const updateSitter = async (req, res) => {
     res.status(500).json({ message: 'Error updating sitter', error: err.message });
   }
 };
+

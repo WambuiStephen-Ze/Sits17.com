@@ -12,7 +12,11 @@ const userModel = (sequelize) => {
       autoIncrement: true,
       primaryKey: true,
     },
-    name: {
+    firstname: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    lastname: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -21,13 +25,17 @@ const userModel = (sequelize) => {
       allowNull: false,
       unique: true,
     },
+    phone: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        is: /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/i, // basic phone number regex
+      },
+    },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    role: {
-      type: DataTypes.STRING,
-      allowNull: true,
     },
     profilePic: {
       type: DataTypes.STRING,
@@ -37,7 +45,11 @@ const userModel = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    numberOfChildren: {
+    numKids: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    numKids: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },

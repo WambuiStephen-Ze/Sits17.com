@@ -1,6 +1,0 @@
-#NODE MODULES 
-node_modules/
-
-#.ENV
-.env
-

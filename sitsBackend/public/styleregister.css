@@ -2,190 +2,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Montserrat", sans-serif;
-}
-
-:root {
-    --Libre-Baskerville: 'Libre Baskerville';
-    --white: #f9f9f7;
-    --blue1: #5F8FA5;
-    --brown: #F3D89F;
-    --blue2: #979797;
-    --blue3: #051C36;
-}
-
-body {
-    background-color: white;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Navbar styling */
-.navbar {
-    width: 100%;
-    background-color: var(--blue3);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.8rem 2rem;
-}
-
-.navbar img {
-    height: 40px;
-}
-
-.navbar ul {
-    display: flex;
-    gap: 1rem;
-    list-style: none;
-}
-
-.navbar ul li a {
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.navbar ul li a:hover {
-    text-decoration: underline;
-}
-
-/* Register form wrapper */
-.wrapper {
-    width: 90%;
-    max-width: 500px;
-    background: var(--blue1);
-    color: white;
-    border-radius: 1rem;
-    padding: 2rem;
-    margin: 2rem auto;
-}
-
-.wrapper h1 {
-    font-size: 1.8rem;
-    text-align: center;
-    margin-bottom: 0.5rem;
-}
-
-.wrapper p {
-    font-size: 1rem;
-    text-align: center;
-    margin-bottom: 1.5rem;
-}
-
-/* Input box styling */
-.input-box {
-    margin-bottom: 1.5rem;
-}
-
-.input-box label {
-    display: block;
-    margin-bottom: 0.3rem;
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-.input-box input[type="text"],
-.input-box input[type="email"],
-.input-box input[type="number"],
-.input-box input[type="password"],
-.input-box input[type="file"],
-.input-box input[type="radio"] {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    font-size: 0.9rem;
-    background: transparent;
-    color: white;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    border-radius: 30px;
-    outline: none;
-}
-
-.input-box input[type="file"] {
-    background-color: white;
-    color: black;
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-}
-
-.input-box input::placeholder {
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.input-box input[type="radio"] {
-    width: auto;
-    margin-right: 0.5rem;
-    accent-color: white;
-}
-
-.input-box label input[type="radio"] + label {
-    margin-right: 1rem;
-    font-weight: normal;
-}
-
-/* Button */
-.wrapper .btn {
-    width: 100%;
-    height: 3rem;
-    background: white;
-    border: none;
-    border-radius: 40px;
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--blue1);
-    cursor: pointer;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-    transition: background-color 0.3s ease;
-}
-
-.wrapper .btn:hover {
-    background-color: var(--brown);
-    color: var(--blue3);
-}
-
-/* Register link */
-.wrapper .register-link {
-    font-size: 0.9rem;
-    text-align: center;
-    margin-top: 1.5rem;
-}
-
-.register-link p a {
-    color: white;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.register-link p a:hover {
-    text-decoration: underline;
-}
-
-/* Responsive Design */
-@media screen and (max-width: 600px) {
-    .wrapper {
-        width: 90%;
-        padding: 1.5rem;
-    }
-
-    .navbar ul {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .navbar ul li {
-        margin-bottom: 0.5rem;
-    }
-}
-
-
-
-
-/* * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
     font-family: "montserrat", sans-serif;
 }
 :root{
@@ -197,20 +13,19 @@ body {
     --blue3: #051C36;
 }
 body {
-    display: flex;
+    display: grid;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     background-color: white;
 }
 .wrapper {
-    width: 27%;
+    width: 100%;
     background: var(--blue1);
     color: white;
     border-radius: 1rem;
-    padding: 2rem;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    padding: 3rem;
+    margin:2rem;
 }
 .wrapper h1 {
     font-size: 1.6rem;
@@ -222,15 +37,29 @@ body {
     text-align: center;
 }
 
-.wrapper .input-box {
-    position: relative;
-    margin: 2rem 0;
-    width: 100%;
-    height: 1.5rem;
+.input-row{
+    gap: 1rem;
+    flex-wrap: wrap;
 }
-.input-box input {
-    width: 100%;
-    height: 100%;
+.input-box {
+    padding-top: 2rem;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 1.5rem;
+    flex: 1;
+    margin-bottom: 0.1rem;
+}
+
+.input-box label {
+    width: 8rem;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+    white-space: nowrap;
+}
+input {
+    width: 80%;
+    flex: 1;
     background: transparent;
     border: none;
     outline: none;
@@ -238,29 +67,17 @@ body {
     border-radius: 40px;
     font-size: 0.8rem;
     color: white;
-    padding: 1.4rem 3rem 1.4rem 1.4rem;
+    padding: 1.5rem;
 }
 .input-box input::placeholder {
     color: white;
 }
-.wrapper .remember-forgot {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.9rem;
-    margin: -1rem 0 1rem;
+.button{
+    justify-self: center;
+    align-items: center;
+    margin-top: 2rem;
 }
-.remember-forgot label input {
-    accent-color: black;
-    margin-right: 0.2rem;
-}
-.remember-forgot a {
-    color: white;
-    text-decoration: none;
-}
-.remember-forgot a:hover {
-    text-decoration: underline;
-}
-.wrapper .btn {
+.btn {
     width: 100%;
     height: 3rem;
     background: white;
@@ -269,14 +86,15 @@ body {
     border-radius: 40px;
     box-shadow: 0 0 10px rgb(0, 0, 0, .1);
     cursor: pointer;
-    font-size: 16px;
+    font-size: 1rem;
     color: black;
     font-weight: 600;
+    padding: 1rem 5rem;
 }
-.wrapper .register-link {
+.register-link {
     font-size: 0.8rem;
     text-align: center;
-    margin: 20px 0 15px;
+    margin: 1rem;
 }
 .register-link p a {
     color: white;
@@ -285,4 +103,54 @@ body {
 }
 .register-link p a:hover {
     text-decoration: underline;
-} */
+}
+@media screen and (max-width: 768px) {
+  .wrapper {
+    padding: 1.5rem;
+    max-width: 95%;
+    margin: 1rem auto;
+  }
+
+  .wrapper h1 {
+    font-size: 1.4rem;
+  }
+
+  .wrapper p {
+    font-size: 0.9rem;
+  }
+
+  .input-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .input-box label {
+    width: 100%;
+    font-size: 0.95rem;
+  }
+
+  .input-box input {
+    width: 100%;
+    padding: 1rem;
+    font-size: 0.9rem;
+    border-radius: 0.6rem;
+  }
+
+  .btn {
+    font-size: 1rem;
+    padding: 1rem;
+    width: 100%;
+  }
+
+  .register-link {
+    font-size: 0.85rem;
+    margin-top: 1.5rem;
+  }
+
+  #preview {
+    max-width: 100%;
+    height: auto;
+  }
+}

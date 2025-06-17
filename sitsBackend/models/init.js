@@ -1,4 +1,3 @@
-// models/init.js
 import { Sequelize, DataTypes } from 'sequelize';
 import userModel from './userModel.js';
 import bcrypt from 'bcryptjs';
@@ -11,48 +10,39 @@ const initializeModels = (sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-  //   sitterId: {
-  //   type: DataTypes.INTEGER,
-  //   allowNull: false,
-  //   references: {
-  //     model: 'Sitters',
-  //     key: 'id',
-  //   },
-  // },
-  firstname: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  lastname: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  experience: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  location: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  availability: {
-    type: DataTypes.JSON,
-    allowNull: true,
-  },
-  profilePic: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  
+    firstname: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    lastname: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    experience: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    location: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    availability: {
+      type: DataTypes.JSON,
+      allowNull: true,
+    },
+    profilePic: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   }, {
     timestamps: false,
     tableName: 'sitters',
@@ -70,7 +60,6 @@ const initializeModels = (sequelize) => {
         }
       },
     },
-
   });
 
   const Booking = sequelize.define('booking', {
@@ -84,6 +73,10 @@ const initializeModels = (sequelize) => {
     },
     date: {
       type: DataTypes.DATE,
+      allowNull: false,
+    },
+    duration: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     status: {

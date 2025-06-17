@@ -1,3 +1,4 @@
+//user  routes 
 import express from 'express';
 import { registerParent, getUser, updateUserData, loginParent } from '../controllers/userController.js';
 

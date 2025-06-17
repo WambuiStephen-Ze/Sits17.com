@@ -1,10 +1,10 @@
-/* * {
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: "montserrat", sans-serif;
 }
-:root{
+:root {
     --Libre-Baskerville: 'Libre Baskerville';
     --white: #f9f9f7;
     --blue1: #5F8FA5;
@@ -20,7 +20,8 @@ body {
     background-color: white;
 }
 .wrapper {
-    width: 25%;
+    width: 100%;
+    max-width: 25%;
     background: var(--blue1);
     color: white;
     border-radius: 1rem;
@@ -93,161 +94,30 @@ body {
 }
 .register-link p a:hover {
     text-decoration: underline;
-} */
-
-/* Global Reset & Base Styles */
-/* 
- */
-
-
- /* Global Reset & Base Styles */
-/* Global Reset & Base Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Montserrat", sans-serif;
 }
 
-:root {
-    --Libre-Baskerville: 'Libre Baskerville', serif;
-    --white: #f9f9f7;
-    --blue1: #5F8FA5;
-    --brown: #F3D89F;
-    --blue2: #979797;
-    --blue3: #051C36;
+@media screen and (max-width:800px) {
+    .wrapper {
+        max-width: 75%;
+    }
+    .input-box input {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+    .btn {
+        height: auto;
+        padding: 1rem;
+        font-size: 1rem;
+    }
+    .wrapper h1 {
+        font-size: 1.4rem;
+    }
+    .wrapper p {
+        font-size: 1rem;
+    }
 }
 
-/* Body & Wrapper Centering */
-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    background-color: var(--white);
-}
-
-/* Login Form Container */
-.wrapper {
-    width: 90%;
-    max-width: 400px;
-    background: var(--blue1);
-    color: var(--white);
-    border-radius: 1rem;
-    padding: 2rem;
-    margin-top: 3rem;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-}
-
-/* Login Heading */
-.wrapper h1 {
-    font-size: 2rem;
-    text-align: center;
-    font-family: var(--Libre-Baskerville);
-    margin-bottom: 1.5rem;
-}
-
-/* Input Box Styles */
-.input-box {
-    position: relative;
-    margin: 1.5rem 0;
-    width: 100%;
-    height: 3.2rem;
-}
-
-.input-box input {
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 40px;
-    font-size: 1rem;
-    color: var(--white);
-    padding: 0 1rem;
-    outline: none;
-}
-
-/* Icons inside input */
-.input-box i {
-    position: absolute;
-    right: 1.2rem;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 1.2rem;
-    color: var(--white);
-}
-
-/* Placeholder text */
-.input-box input::placeholder {
-    color: var(--white);
-    opacity: 0.9;
-}
-
-/* Remember Me + Forgot */
-.remember-forgot {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.85rem;
-    margin: 0.5rem 0 1rem;
-}
-
-.remember-forgot label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}
-
-.remember-forgot label input {
-    margin-right: 0.4rem;
-    accent-color: black;
-    cursor: pointer;
-}
-
-.remember-forgot a {
-    color: var(--white);
-    text-decoration: none;
-    transition: text-decoration 0.3s ease;
-}
-
-.remember-forgot a:hover {
-    text-decoration: underline;
-}
-
-/* Submit Button */
-.btn {
-    width: 100%;
-    height: 3rem;
-    background: var(--white);
-    border: none;
-    border-radius: 40px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    font-size: 1rem;
-    color: var(--blue3);
-    font-weight: 600;
-    transition: background 0.3s ease;
-}
-
-.btn:hover {
-    background: var(--brown);
-    color: var(--blue3);
-}
-
-/* Register Link */
-.register-link {
-    font-size: 0.85rem;
-    text-align: center;
-    margin-top: 1.5rem;
-}
-
-.register-link p a {
-    color: var(--white);
-    text-decoration: none;
-    font-weight: 600;
-    transition: text-decoration 0.3s ease;
-}
-
-.register-link p a:hover {
-    text-decoration: underline;
+/* 👇 Add this block at the end */
+.hidden {
+    display: none !important;
 }

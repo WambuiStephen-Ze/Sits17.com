@@ -1,34 +1,19 @@
+//user  routes 
 import express from 'express';
+import { registerParent, getUser, updateUserData, loginParent } from '../controllers/userController.js';
+
 const router = express.Router();
-import nodemailer from 'nodemailer';
+// registering new parent
+router.post('/register', registerParent);
 
-// Nodemailer transport configuration
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+//login parents as users
+router.post('/login', loginParent);
 
-// Send confirmation email
-router.post('/', async (req, res) => {
-  const { userEmail, sitterEmail, bookingDetails } = req.body;
 
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: [userEmail, sitterEmail],
-    subject: 'Booking Confirmation',
-    text: `Your booking has been confirmed! Details: ${JSON.stringify(bookingDetails)}`,
- instruction: 'Shift + Enter to add a line break in WhatsApp message.',
-  };
+// get user by id
+router.get('/:id', getUser);
 
-  try {
-    await transporter.sendMail(mailOptions);
-    res.status(200).json({ message: 'Confirmation email sent' });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to send email' });
-  }
-});
+// update user date
+router.put('/:id', updateUserData);
 
 export default router;

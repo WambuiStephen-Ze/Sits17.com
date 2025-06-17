@@ -24,13 +24,16 @@ body{
 }
 
 .navbar{
-    position: absolute;
+    position: fixed;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 1.5rem;
     background-color: var(--blue1);
     height:5rem;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2;
 }
 .navbar img{
     width: 3rem;
@@ -40,42 +43,35 @@ body{
 .navbar ul {
     display: flex;
     list-style: none;
-    gap: 1.2rem;
+    gap: 1.5rem;
+    margin-left: 9rem;
 }
 
 nav a {
     text-decoration: none;
-    color: var(--blue2);
+    color: var(--blue3);
     font-weight: bold;
     text-transform: uppercase;
-    transition: background-color 0.3s;
 }
 .navbar h2{
-    margin-left: 9rem;
     color: var(--blue3);
     font-size: 1.6rem;
 }
 .navbar a:active {
     background-color: white;
 }
-.navbar button{
-    border: none;
-    border-radius: 4rem;
-    padding: 1.3rem 1.8rem;
-    color: white;
-    background-color: var(--blue3);
-    font-weight: 700;
-    margin-left: 20.5rem;
+
+a {
+  pointer-events: auto;
 }
-.navbar button:hover{
-    color: var(--blue2);
-}
-@media (max-width: 768px) {
-  .navbar h2,
-  .navbar button,
-  .hero-container img {
-    margin-left: 1rem;
-  }
+.nav-toggle {
+  display: none;
+  font-size: 2rem;
+  background: none;
+  background-color: none ;
+  border: none;
+  color: var(--blue3);
+  cursor: pointer;
 }
 
 .hero-container{
@@ -92,7 +88,7 @@ nav a {
 }
 .hero-words{
     position: relative;
-    top: -30rem;
+    top: -32rem;
     padding-left: 6.5rem;
     letter-spacing: 0.3rem;
 }
@@ -134,6 +130,70 @@ button:hover {
     background: var(--blue2);
 }
 
+/* Responsive styles */
+@media (max-width: 1200px) {
+  .nav-toggle {
+    display: block;
+    background-color: none;
+  }
+  .navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: auto;
+    padding: 1rem;
+    align-items: center;
+   }
+  .navbar ul {
+    flex-direction: column;
+    align-items: flex-end;
+    max-width: 2%;
+
+  }
+  .navbar h2 {
+    font-size: 1.2rem;
+  }
+
+  #nav-links {
+    display: none;
+    flex-direction: column;
+    width: 70%;
+    max-width: 60%;
+    gap: 1rem;
+    padding: 1rem 0;
+    position: absolute;
+    top: 5rem;
+    z-index: 2;
+  }
+  
+  #nav-links.open {
+  display: flex;
+  }
+
+.hero-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-words {
+    padding: 0;
+  }
+
+  .hero-buttons {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .btn1,
+  .btn2 {
+    margin-top: 0.8rem;
+    width: 100%;
+    max-width: 40%;
+  }
+}
+
 .our-story{
     margin-left: 6rem;
 }
@@ -156,6 +216,37 @@ button:hover {
     max-width: 100%;
     height: 40vh;
 }
+@media screen and (max-width: 1200px) {
+  .our-story {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .story-words {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .story-words h3 {
+    font-size: 1.1rem;
+  }
+
+  .story-images {
+    flex-direction: column;
+    align-items: center;
+    padding-left: 0;
+    padding-top: 1rem;
+    margin-right: 0;
+    height: auto;
+  }
+
+  .story-images img {
+    width: 80%;
+    height: auto;
+  }
+}
+
 #sitters{
     padding-top: 7rem;
     padding-left: 5rem;
@@ -192,6 +283,7 @@ button:hover {
   max-height: auto;
   text-align: center;
   font-weight: 500;
+  margin-right: 2.5rem;
 }
 .pin {
   font-size: 1rem;
@@ -317,6 +409,67 @@ button:hover {
     border-radius: 50%;
     margin-right: 0.5rem;
 }
+@media screen and (max-width: 1200px) {
+  #safety {
+    grid-template-columns: 1fr;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    height: auto;
+    font-size: 1rem;
+  }
+
+  .image-box {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .mom {
+    width: 80%;
+    max-height: 100vh;
+    margin-left: 1rem;
+    margin-right: 1.4rem;
+  }
+
+  .sitter-selector {
+    position: static;
+    width: 100%;
+    left: 0;
+    top: 0;
+    margin-top: 1.2rem;
+  }
+
+  .sitter-box {
+    justify-content: center;
+  }
+
+  .sitter-box img {
+    width: 3rem;
+  }
+  .safety-features h3 {
+    font-size: 0.9rem;
+    flex-wrap: wrap;
+  }
+
+  .pp {
+    margin: 0.4rem 0;
+    font-size: 0.85rem;
+  }
+
+  #safety h2 {
+    font-size: 1.5rem;
+    text-align: left;
+  }
+
+  .sitter-box p {
+    font-size: 0.65rem;
+  }
+
+  .sitter-selector h4 {
+    font-size: 0.9rem;
+  }
+}
 
 .services-container{
     margin: 3.5rem 10rem;
@@ -401,6 +554,54 @@ button:hover {
 .btn4 button:hover{
     background: #555;
 }
+@media screen and (max-width: 1200px) {
+  .serve-contain {
+    margin: 13rem 1rem 0 1rem;
+    
+  }
+  .title {
+    font-size: 1.4rem;
+    text-align: left;
+  }
+
+  .full-text {
+    padding: 1rem;
+  }
+
+  .serve h3 {
+    font-size: 1rem;
+    margin: 1rem 0;
+    align-items: center;
+  }
+
+  .serve h3 img {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .serve p {
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .btn4 {
+    margin: 2rem auto;
+    text-align: center;
+  }
+
+  .btn4 button {
+    width: 50%;
+    padding: 1.2rem;
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .title {
+    font-size: 1.2rem;
+  }
+}
 
 #AboutUs{
     margin: 3.8rem 10rem;
@@ -448,8 +649,8 @@ form input, form textarea {
 }
 
 .contactus p{
-    font-size: 1.3rem;
-    padding-bottom: 1rem;
+    font-size: 0.8rem;
+    padding-bottom: 0.8rem;
 }
 
 .links ul{
@@ -485,8 +686,7 @@ ul a:hover{
 .btn9{
     border-radius: 1rem;
     background-color: var(--blue3);
-    border: none;
-    
+    border: none;   
 }
 
 .subscribe input{
@@ -534,83 +734,89 @@ ul a:hover{
     height: 1.8rem;
     margin-right: 1rem;
 }
-/* Hide menu icon on desktop */
-.menu-toggle {
-  display: none;
-  font-size: 2rem;
-  color: white;
-  cursor: pointer;
-}
 
-/* Mobile styles */
-@media (max-width: 768px) {
-  .navbar {
-    flex-wrap: wrap;
-    height: auto;
-    padding: 1rem;
-  }
-
-  .navbar h2 {
-    margin-left: 0;
-    flex: 1;
-  }
-
-  .menu-toggle {
-    display: block;
-  }
-
-  #nav-links {
-    display: none;
-    flex-direction: column;
-    width: 100%;
-    background-color: var(--blue1);
-    margin-top: 1rem;
-    padding: 1rem 0;
-  }
-
-  #nav-links li {
-    margin: 0.5rem 0;
-    text-align: center;
-  }
-
-  #nav-links.show {
+@media screen and (max-width: 1200px) {
+  #contact {
     display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.5rem;
+    height: 40%;
+    margin-top: 12rem;
+    gap: 1rem;
   }
 
-  .navbar button {
-    display: none; /* Hide contact button on mobile or move it inside menu if needed */
+  .contactus,
+  .links,
+  .subscribe {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .contactus h2 {
+    font-size: 1.3rem;
+  }
+  .mail,
+  .phone{
+    gap: 0.6rem;
+    width: 2%;
+    height: 2%;
+  }
+
+  .links ul { 
+    font-size: 0.6rem;
+    gap: 1rem;
+    padding: 0;
+  }
+
+  .subscribe {
+    align-items: center;
+  }
+
+  .subscribe input {
+    width: 100%;
+  }
+
+  .subscribe button {
+    width: 100%;
+  }
+
+  .socials img,
+  .payment img {
+    width: 1.6rem;
+    height: auto;
   }
 }
 
-
-@media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-    height: auto;
-    padding: 1rem;
+@media screen and (max-width: 1200px) {
+  .contactus p,
+  .links ul li,
+  .subscribe input,
+  .subscribe button {
+    font-size: 0.78rem;
   }
 
-  .navbar h2, .navbar button {
-    margin-left: 0;
-    margin-top: 0.5rem;
+  .contactus img {
+    width: 1.5rem;
+    height: 1.5rem;
   }
+}
 
-  .navbar ul {
-    flex-direction: column;
-    gap: 0.5rem;
-    padding-top: 1rem;
-  }
-
+@media (max-width: 1200px) {
   .hero-container img {
     margin-left: 0;
     height: auto;
     width: 100%;
   }
-
-  .hero-words,
+   .hero-words{
+    top: -10rem;
+    padding-left: 0rem;
+    font-size: 1.2rem;
+  }
+  
   .hero-buttons {
     top: -10rem;
-    padding-left: 2rem;
+    padding-left: 0rem;
     font-size: 1.2rem;
   }
 
@@ -636,15 +842,14 @@ ul a:hover{
     padding-left: 2rem;
     padding-right: 2rem;
   }
+  .sitter-info {
+    font-size: 0.8rem;
+  }
 
   #safety {
     grid-template-columns: 1fr;
     margin-left: 2rem;
     height: auto;
-  }
-
-  .mom {
-    width: 100%;
   }
 
   .sitter-selector {
@@ -670,13 +875,6 @@ ul a:hover{
   .btn4 {
     margin-left: 0;
     text-align: center;
-  }
-
-  #contact {
-    flex-direction: column;
-    gap: 1rem;
-    padding: 2rem;
-    height: auto;
   }
 
   .subscribe {
@@ -710,8 +908,8 @@ ul a:hover{
   .services-container, #AboutUs {
     margin: 5rem 15rem;
   }
-}
 
-.hero-words {
+  .hero-words {
   font-size: clamp(1rem, 2.5vw, 2rem);
+  }
 }

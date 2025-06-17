@@ -14,11 +14,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
 import bodyParser from 'body-parser';
-<<<<<<< HEAD
 import { loginParent } from './controllers/userController.js';
-=======
 import bcrypt from 'bcrypt';
->>>>>>> f605a1ef3a876ae81b3300d15074812ac527ef95
 
 dotenv.config();
 
@@ -42,7 +39,9 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 const storage = multer.memoryStorage(); // Store file in memory (or use diskStorage for files)
 const upload = multer({ storage: storage });
-app.use(express.static(path.join(__dirname, '../Frontend'))); // Serve frontend static files
+app.use(express.static('views'));
+
+app.use(express.static(path.join(__dirname, 'views'))); // Serve frontend static files
 app.use(express.static(path.join(__dirname, 'public'))); // Serve public static files
 
 // Routes for Users
@@ -126,16 +125,19 @@ app.get('/', (req, res) => {
 });
 
 // Serve login.html when accessing /loginParent
-app.get('/login', (req, res) => {
+// app.get('/login.html', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'views', 'login.html'));
+// });
+app.get('/api/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'login.html'));
 });
-app.get('/loginSitter', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'login.html'));
-});
+// app.get('/api/loginSitter', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'views', 'login.html'));
+// });
 
 //login 
-app.post('/api/login', loginParent);
-app.post('/api/loginSitter', loginSitter);
+app.post('/api/login', loginParent, loginSitter);
+// app.post('/api/loginSitter', loginSitter);
 // Serve login.html when accessing /loginSitter
 // app.get('/loginSitter', (req, res) => {
 //   res.sendFile(path.join(__dirname, 'views', 'login.html'));
@@ -180,11 +182,11 @@ app.post('/register', async (req, res) => {
     const newUser = await createUser({
       name,
       email,
-      contact,
+      // contact,
       username,
       password,
-      location,
-      numberOfChildren,
+      // location,
+      // numberOfChildren,
 
       profilePic: profilePic || null,
     });
@@ -222,8 +224,6 @@ app.post('/bookings', async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-=======
 //login route
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
@@ -252,7 +252,6 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Server error during login.' });
   }
 });
->>>>>>> f605a1ef3a876ae81b3300d15074812ac527ef95
 
 // Global Error Handling
 app.use((err, req, res, next) => {
