@@ -34,8 +34,7 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(express.urlencoded({ extended: true })); // for form data
-// app.use(express.json()); // for JSON data (like from Postman/fetch)
+
 
 
 // Multer setup for file upload in memory
@@ -183,13 +182,23 @@ app.use('/api/authenticate', authRoutes);
 // Separate login routes for parent and sitter
 
 // Parent login route
-app.post('/api/login/parent', loginParent);
+// app.post('/api/login/parent', loginParent);
 
 // Sitter login route
-app.post('/api/login/sitter', loginSitter);
+// app.post('/api/login/sitter', loginSitter);
 
 // Or generic login with bcrypt check (example below)
+// ----- STATIC ROUTES -----
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
+
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'login.html'));
+});
+
 app.post('/login', async (req, res) => {
+  console.log('Login Request Body:', req.body);
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -198,22 +207,112 @@ app.post('/login', async (req, res) => {
 
   try {
     const user = await getUserByEmail(email);
+    console.log("USER:", user);
+
     if (!user) {
-      return res.status(401).json({ message: 'Invalid email or password.' });
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password); // use async
+    console.log("Entered:", password);
+    console.log("Stored:", user.password);
+    console.log("Match Result:", isMatch);
+
     if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid email or password.' });
+      return res.status(400).json({
+        status: false,
+        message: "Invalid email or password",
+        data: [],
+      });
     }
-    return res.redirect('/index.html');; 
 
-    // res.status(200).json({ message: 'Login successful', user });
+    const { password: pw, ...userData } = user;
+    return res.status(200).json({ message: 'Login successful', user: userData });
+
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ message: 'Server error during login.' });
   }
 });
+
+
+
+
+
+
+// app.post('/login', async (req, res) => {
+//    console.log('Login Request Body:', req.body);  // <== LOG HERE
+//   const { email, password } = req.body;
+  
+
+
+//   if (!email || !password) {
+//     return res.status(400).json({ message: 'Email and password are required.' });
+//   }
+
+//   try {
+//     const user = await getUserByEmail(email);
+//     console.log("USER:", user);
+//     if (!user) {
+
+//       return res.status(401).json({ message: 'Invalid email.' });
+//     }
+    
+//       const comparePassword = await bcrypt.compareSync(password, user.password);
+
+//         if (!comparePassword) {
+//           return res.status(400).json({
+//             status: false,
+//             message: "Invalid email or password",
+//             data: [],
+//           });
+//         }
+
+// //     const isMatch = await bcrypt.compare(password, user.password);
+// //     if (!isMatch) {
+// //       bcrypt.compare(password, user.password).then(isMatch => {
+// //      console.log('Manual compare result:', isMatch);
+// // });
+    
+// //       console.log('Entered password:', `"${password}"`);
+// //       console.log('Stored (hashed) password:', user.password);
+// //       return res.status(401).json({ message: 'Invalid password.' });
+// //     }
+
+//     const { password: pw, ...userData } = user; // remove password from response
+//     return res.status(200).json({ message: 'Login successful', user: userData });
+
+//   } catch (error) {
+//     console.error('Login error:', error);
+//     res.status(500).json({ message: 'Server error during login.' });
+//   }
+// });
+
+// app.post('/login', async (req, res) => {
+//   const { email, password } = req.body;
+
+//   if (!email || !password) {
+//     return res.status(400).json({ message: 'Email and password are required.' });
+//   }
+
+//   try {
+//     const user = await getUserByEmail(email);
+//     if (!user) {
+//       return res.status(401).json({ message: 'Invalid email or password.' });
+//     }
+
+//     const isMatch = await bcrypt.compare(password, user.password);
+//     if (!isMatch) {
+//       return res.status(401).json({ message: 'Invalid email or password.' });
+//     }
+//     // return res.redirect('/index.html');
+
+//     // res.status(200).json({ message: 'Login successful', user });
+//   } catch (error) {
+//     console.error('Login error:', error);
+//     res.status(500).json({ message: 'Server error during login.' });
+//   }
+// });
 
 // ----- REGISTER ROUTE -----
 app.get('/register', (req, res) => {
@@ -221,6 +320,9 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/register', async (req, res) => {
+  console.log('register Request Body:', req.body);
+  
+  
   const {
     firstname,
     lastname,
@@ -239,7 +341,10 @@ app.post('/register', async (req, res) => {
   }
 
   if (password !== confirmPassword) {
+    console.log('Entered password:', `"${password}"`);
+    console.log('Stored hash:', user.password);
     return res.status(400).json({ message: 'Passwords do not match' });
+
   }
 
   try {
@@ -265,14 +370,6 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// ----- STATIC ROUTES -----
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'index.html'));
-});
-
-app.get('/api/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'login.html'));
-});
 
 // ----- PAYMENT DETAILS -----
 app.get('/api/payment-details', (req, res) => {
