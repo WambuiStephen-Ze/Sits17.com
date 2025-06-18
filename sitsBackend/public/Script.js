@@ -481,3 +481,44 @@ document.addEventListener("DOMContentLoaded", () => {
     loginUser();
   }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const bookButtons = document.querySelectorAll(".bookme");
+
+  bookButtons.forEach(button => {
+    button.addEventListener("click", async () => {
+      const sitterId = button.getAttribute("data-sitter-id");
+
+      // Dummy parent ID for now; in practice, get this from login/session
+      const parentId = 1;
+
+      const bookingData = {
+        sitterId: sitterId,
+        parentId: parentId,
+        date: new Date().toISOString(), // you may use a datepicker instead
+        status: "pending"
+      };
+
+      try {
+        const response = await fetch("http://localhost:3000/api/bookings", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(bookingData)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert("Booking request sent successfully!");
+        } else {
+          alert("Booking failed: " + result.message);
+        }
+      } catch (err) {
+        console.error("Error booking sitter:", err);
+        alert("An error occurred while booking.");
+      }
+    });
+  });
+});

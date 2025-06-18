@@ -2,10 +2,14 @@ import { Booking, Sitter, User, sequelize } from '../models/index.js';
 const { Op } = sequelize;
 
 /**
- * Create a new booking
+ * Create a new booking (one sitter per booking)
  */
 export const createBooking = async (req, res) => {
-  const { userId, sitterId, date, duration } = req.body;
+  const { userId, sitterId, date, duration, confirmationEmail } = req.body;
+
+  if (!userId || !sitterId || !date || !duration) {
+    return res.status(400).json({ message: 'Missing required booking fields' });
+  }
 
   try {
     const existingBooking = await Booking.findOne({
@@ -14,32 +18,34 @@ export const createBooking = async (req, res) => {
         status: {
           [Op.in]: ['pending', 'confirmed'],
         },
-      },
+        date
+      }
     });
 
     if (existingBooking) {
       return res.status(400).json({ message: 'Sitter is already booked at this time.' });
     }
 
-    const booking = await Booking.create({
+    const newBooking = await Booking.create({
       userId,
       sitterId,
       date,
       duration,
       status: 'pending',
+      confirmationEmail: confirmationEmail ?? false,
     });
 
-    const fullBooking = await Booking.findByPk(booking.id, {
+    const fullBooking = await Booking.findByPk(newBooking.id, {
       include: [
         { model: User, as: 'User' },
         { model: Sitter, as: 'Sitter' },
       ],
     });
 
-    res.status(201).json(fullBooking);
+    res.status(201).json({ message: 'Booking created successfully', booking: fullBooking });
   } catch (err) {
     console.error('Create booking error:', err);
-    res.status(500).json({ message: 'Failed to create booking', err });
+    res.status(500).json({ message: 'Failed to create booking', error: err.message });
   }
 };
 
@@ -64,12 +70,12 @@ export const getBookingById = async (req, res) => {
     res.status(200).json(booking);
   } catch (err) {
     console.error('Get booking error:', err);
-    res.status(500).json({ message: 'Failed to fetch booking', err });
+    res.status(500).json({ message: 'Failed to fetch booking', error: err.message });
   }
 };
 
 /**
- * Update a booking (e.g., change date, duration, status)
+ * Update a booking
  */
 export const updateBooking = async (req, res) => {
   const { id } = req.params;
@@ -77,24 +83,21 @@ export const updateBooking = async (req, res) => {
 
   try {
     const booking = await Booking.findByPk(id);
-
-    if (!booking) {
-      return res.status(404).json({ message: 'Booking not found' });
-    }
+    if (!booking) return res.status(404).json({ message: 'Booking not found' });
 
     await booking.update(updates);
 
-    const updatedBooking = await Booking.findByPk(id, {
+    const updated = await Booking.findByPk(id, {
       include: [
         { model: User, as: 'User' },
         { model: Sitter, as: 'Sitter' },
       ],
     });
 
-    res.status(200).json(updatedBooking);
+    res.status(200).json(updated);
   } catch (err) {
     console.error('Update booking error:', err);
-    res.status(500).json({ message: 'Failed to update booking', err });
+    res.status(500).json({ message: 'Failed to update booking', error: err.message });
   }
 };
 
@@ -102,21 +105,19 @@ export const updateBooking = async (req, res) => {
  * Get all bookings for a user
  */
 export const getUserBookings = async (req, res) => {
-  const userId = req.params.userId;
+  const { userId } = req.params;
 
   try {
     const bookings = await Booking.findAll({
       where: { userId },
-      include: [
-        { model: Sitter, as: 'Sitter' },
-      ],
+      include: [{ model: Sitter, as: 'Sitter' }],
       order: [['date', 'DESC']],
     });
 
     res.status(200).json(bookings);
   } catch (err) {
     console.error('Get user bookings error:', err);
-    res.status(500).json({ message: 'Failed to fetch user bookings', err });
+    res.status(500).json({ message: 'Failed to fetch user bookings', error: err.message });
   }
 };
 
@@ -128,10 +129,7 @@ export const cancelBooking = async (req, res) => {
 
   try {
     const booking = await Booking.findByPk(id);
-
-    if (!booking) {
-      return res.status(404).json({ message: 'Booking not found' });
-    }
+    if (!booking) return res.status(404).json({ message: 'Booking not found' });
 
     if (booking.status === 'cancelled') {
       return res.status(400).json({ message: 'Booking is already cancelled' });
@@ -143,6 +141,6 @@ export const cancelBooking = async (req, res) => {
     res.status(200).json({ message: 'Booking cancelled successfully', booking });
   } catch (err) {
     console.error('Cancel booking error:', err);
-    res.status(500).json({ message: 'Failed to cancel booking', err });
+    res.status(500).json({ message: 'Failed to cancel booking', error: err.message });
   }
 };

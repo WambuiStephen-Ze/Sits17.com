@@ -5,15 +5,15 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
 import bcrypt from 'bcrypt';
-
+import bookingRoutes from './routes/bookingRoutes.js';
 // Import your DB connection, models, and controllers
 import { connectDB } from './models/index.js';
 import { getUsers, getUser, createUser, getUserByEmail } from './config/db.js';
-import Sitter from './models/sitter.js';               // Make sure path is correct
-import Booking from './models/booking.js';             // Make sure path is correct
+import Sitter from './models/sitter.js';            
+import Booking from './models/booking.js';            
 import userRoutes from './routes/userRoutes.js';
 import sitterRoutes from './routes/sitterRoutes.js';
-import bookingRoutes from './routes/bookingRoutes.js';
+// import bookingRoutes from './routes/bookingRoutes.js';
 import emailRoutes from './routes/emailRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import { registerSitter, getAllSitters, getSitterById, updateSitter, loginSitter } from './controllers/sitterController.js';
@@ -147,7 +147,12 @@ app.get('/sitters/:id', getSitterById);
 app.put('/sitters/:id', updateSitter);
 
 // ----- BOOKING ROUTES -----
+// router.get('/:id', protect, getBookingById);
+// app.js
+
+
 app.use('/api/bookings', bookingRoutes);
+
 
 // Booking creation route
 app.post('/bookings', async (req, res) => {
