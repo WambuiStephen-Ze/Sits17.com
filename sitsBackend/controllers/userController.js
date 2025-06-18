@@ -15,10 +15,20 @@ const generateToken = (user) => {
 
 export const registerParent = async (req, res) => {
   try {
-    const { firstname, lastname, email, password, profilePic, location, numberOfChildren } = req.body;
+    const { 
+      firstname, 
+      lastname, 
+      numKids,
+      ageKids,  
+      phone, 
+      email,
+      location, 
+      profilePic, 
+      password,
+      confirmPassword} = req.body;
 
     // Validate required fields
-    if (!firstname || !email || !password) {
+    if (!firstname || !lastname || !numKids || !ageKids || !phone || !email || !location || !profilePic || !password || !confirmPassword) {
       return res.status(400).json({ message: 'first name, last name, email, and password are required' });
     }
 
@@ -33,15 +43,17 @@ export const registerParent = async (req, res) => {
 
     // Create user
     const user = await createUser({
-      firstname,
-      lastname,
-      username,
-      contact,
+      firstname, 
+      lastname, 
+      numKids,
+      ageKids,  
+      phone, 
       email,
+      location, 
+      profilePic, 
       password: hashedPassword,
-      profilePic,
-      location,
-      numberOfChildren,
+      confirmPassword
+       
     });
 
     // Generate and return JWT token

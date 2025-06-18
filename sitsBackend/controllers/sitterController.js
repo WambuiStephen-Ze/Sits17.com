@@ -16,10 +16,19 @@ const generateToken = (sitter) => {
 // Register a new sitter
 export const registerSitter = async (req, res) => {
   try {
-    const { firstname, lastname, email, phone, password, profilePic, location, experience, availability } = req.body;
+    const { firstname, 
+      lastname, 
+      location, 
+      profilePic, 
+      years, 
+      availablility, 
+      phone, 
+      email, 
+      password,
+      confirmPassword } = req.body;
 
     // Validate required fields
-    if ( !email || !password) {
+    if ( !firstname || !lastname || !location || !profilePic || !years || !availablility || !email || !password || !confirmPassword) {
       return res.status(400).json({ message: 'Name, email, and password are required' });
     }
 
@@ -34,15 +43,16 @@ export const registerSitter = async (req, res) => {
 
     // Create sitter
     const sitter = await Sitter.create({
-      firstname,
-      lastname,
-      email,
-      phone,
+      lastname, 
+      location, 
+      profilePic, 
+      years, 
+      availablility, 
+      phone, 
+      email, 
       password: hashedPassword,
-      profilePic,
-      location,
-      experience,
-      availability,
+      confirmPassword 
+    
     });
 
     // Generate JWT token

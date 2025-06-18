@@ -1,25 +1,25 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { getUsers, getUser, createUser, getUserByEmail } from './config/db.js';
-import userRoutes from './routes/userRoutes.js';
-import sitterRoutes from './routes/sitterRoutes.js';
-import { connectDB} from './models/index.js';
-import booking from './models/booking.js'
-import { registerSitter, getAllSitters, getSitterById, updateSitter, loginSitter } from './controllers/sitterController.js';
-import bookingRoutes from './routes/bookingRoutes.js';
-import emailRoutes from './routes/emailRoutes.js';
-import authRoutes from './routes/authRoutes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
-import bodyParser from 'body-parser';
-import { loginParent } from './controllers/userController.js';
 import bcrypt from 'bcrypt';
 
-dotenv.config();
+// Import your DB connection, models, and controllers
+import { connectDB } from './models/index.js';
+import { getUsers, getUser, createUser, getUserByEmail } from './config/db.js';
+import Sitter from './models/sitter.js';               // Make sure path is correct
+import Booking from './models/booking.js';             // Make sure path is correct
+import userRoutes from './routes/userRoutes.js';
+import sitterRoutes from './routes/sitterRoutes.js';
+import bookingRoutes from './routes/bookingRoutes.js';
+import emailRoutes from './routes/emailRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+import { registerSitter, getAllSitters, getSitterById, updateSitter, loginSitter } from './controllers/sitterController.js';
+import { loginParent } from './controllers/userController.js';
 
-const zoomToken = process.env.ZOOM_JWT_TOKEN;
+dotenv.config();
 
 const app = express();
 
@@ -27,24 +27,27 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Connect to the database
+// Connect to DB
 connectDB();
 
 // Middleware
 app.use(cors());
-app.use(express.json()); // Parse JSON bodies
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true })); // for form data
+// app.use(express.json()); // for JSON data (like from Postman/fetch)
 
-const storage = multer.memoryStorage(); // Store file in memory (or use diskStorage for files)
-const upload = multer({ storage: storage });
-app.use(express.static('views'));
 
-app.use(express.static(path.join(__dirname, 'views'))); // Serve frontend static files
-app.use(express.static(path.join(__dirname, 'public'))); // Serve public static files
+// Multer setup for file upload in memory
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
-// Routes for Users
+// Static file serving
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'views')));
+
+// ----- USER ROUTES -----
+// Get all users
 app.get('/users', async (req, res) => {
   try {
     const users = await getUsers();
@@ -54,64 +57,82 @@ app.get('/users', async (req, res) => {
   }
 });
 
+// Get user by id
 app.get('/users/:id', async (req, res) => {
   try {
     const user = await getUser(req.params.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
     res.json(user);
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-});
-
-app.post('/users', async (req, res) => {
-  try {
-    const { name, email, password, location, numberOfChildren } = req.body;
-    const newUser = await createUser(name, email, password, location, numberOfChildren);
-    res.status(201).json(newUser);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-// Other Routes
-app.use('/api/users', userRoutes);
+// Create user (alternative endpoint, or can remove if using /register)
+app.post('/users', async (req, res) => {
+  try {
+    const { firstname, lastname, numKids, ageKids, phone, email, location, profilePic, password, confirmPassword } = req.body;
+    if (!firstname || !lastname || !numKids || !ageKids || !phone || !email || !location || !profilePic || !password) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: 'Passwords do not match' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await createUser({
+      firstname,
+      lastname,
+      numKids,
+      ageKids,
+      phone,
+      email,
+      location,
+      profilePic,
+      password: hashedPassword,
+    });
+
+    res.status(201).json({ message: 'User created successfully', user: newUser });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// ----- SITTER ROUTES -----
+// Use sitterRoutes if they contain routes for sitters
 app.use('/api/sitters', sitterRoutes);
-app.use('/api/bookings', bookingRoutes);
-app.use('/api/sendConfirmation', emailRoutes);
-app.use('/api/authenticate', authRoutes);
 
-
-// Sitter Routes
-app.post('/sitters', registerSitter);
-app.get('/sitters', getAllSitters);
-app.get('/sitters/:id', getSitterById);
-app.put('/sitters/:id', updateSitter);
-
-
-// Add sitter route with multer
+// Custom POST sitter registration with multer file upload and password hashing
 app.post('/sitters', upload.single('profilePic'), async (req, res) => {
   try {
-    const { email, password, location, availability } = req.body;
+    const { firstname, lastname, location, years, availability, phone, email, password, confirmPassword } = req.body;
     const profilePic = req.file ? req.file.buffer.toString('base64') : null;
 
-    if (!email || !password || !location) {
+    // Validate required fields
+    if (!firstname || !lastname || !location || !profilePic || !years || !availability || !email || !password || !confirmPassword) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
-    // Assuming Sitter.create is defined in models
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: 'Passwords do not match' });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const newSitter = await Sitter.create({
-     
       firstname,
       lastname,
-      email,
-      contact,
-      password,
       location,
-      availability,
-      sitterId,
       profilePic,
+      years,
+      availability,
+      phone,
+      email,
+      password: hashedPassword,
     });
-
+    res.redirect('/login.html'); 
     res.status(201).json({ message: 'Sitter registered successfully', sitter: newSitter });
   } catch (error) {
     console.error('Error registering sitter:', error);
@@ -119,89 +140,17 @@ app.post('/sitters', upload.single('profilePic'), async (req, res) => {
   }
 });
 
-// Root Route
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'index.html'));
-});
+// Get all sitters
+app.get('/sitters', getAllSitters);
+// Get sitter by ID
+app.get('/sitters/:id', getSitterById);
+// Update sitter
+app.put('/sitters/:id', updateSitter);
 
-// Serve login.html when accessing /loginParent
-// app.get('/login.html', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'views', 'login.html'));
-// });
-app.get('/api/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'login.html'));
-});
-// app.get('/api/loginSitter', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'views', 'login.html'));
-// });
+// ----- BOOKING ROUTES -----
+app.use('/api/bookings', bookingRoutes);
 
-//login 
-app.post('/api/login', loginParent, loginSitter);
-// app.post('/api/loginSitter', loginSitter);
-// Serve login.html when accessing /loginSitter
-// app.get('/loginSitter', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'views', 'login.html'));
-// });
-
-// Serve register.html when accessing /register
-app.get('/register', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'register.html'));
-});
-
-// Define POST /register
-app.post('/register', async (req, res) => {
-  console.log('Request headers:', req.headers);
-  console.log('Request body:', req.body);
-  console.log('Content-Type:', req.get('Content-Type'));
-
-  const {
-    firstname,
-    lastname,
-    email,
-    contact,
-    username,
-    password,
-    confirmPassword,
-    location,
-    numberOfChildren,
-    profilePic,
-  } = req.body;
-
-  const name = `${firstname} ${lastname}`;
-
-  // Validate required fields
-  if (!name || !email || !password) {
-    return res.status(400).json({ message: 'name, email, and password are required' });
-  }
-
-  if (password !== confirmPassword) {
-    return res.status(400).json({ message: 'Passwords do not match' });
-  }
-
-  try {
-    const newUser = await createUser({
-      name,
-      email,
-      // contact,
-      username,
-      password,
-      // location,
-      // numberOfChildren,
-
-      profilePic: profilePic || null,
-    });
-
-    res.status(201).json({ message: 'User registered successfully', user: newUser });
-  } catch (error) {
-    console.error('Registration error:', error);
-    res.status(500).json({ message: error.message });
-  }
-});
-
-
-
-
-//booking 
+// Booking creation route
 app.post('/bookings', async (req, res) => {
   try {
     const { userId, bookedSitters, bookingDate, confirmationEmail } = req.body;
@@ -217,54 +166,127 @@ app.post('/bookings', async (req, res) => {
       confirmationEmail: confirmationEmail ?? false,
     });
 
-    return res.status(201).json({ message: 'Booking created successfully', booking: newBooking });
+    res.status(201).json({ message: 'Booking created successfully', booking: newBooking });
   } catch (error) {
     console.error('Error creating booking:', error);
-    return res.status(500).json({ message: 'Booking failed', error: error.message });
+    res.status(500).json({ message: 'Booking failed', error: error.message });
   }
 });
 
-//login route
+// ----- EMAIL ROUTES -----
+app.use('/api/sendConfirmation', emailRoutes);
+
+// ----- AUTH ROUTES -----
+app.use('/api/authenticate', authRoutes);
+
+// ----- LOGIN ROUTES -----
+// Separate login routes for parent and sitter
+
+// Parent login route
+app.post('/api/login/parent', loginParent);
+
+// Sitter login route
+app.post('/api/login/sitter', loginSitter);
+
+// Or generic login with bcrypt check (example below)
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
-  // Validate presence
   if (!email || !password) {
     return res.status(400).json({ message: 'Email and password are required.' });
   }
 
   try {
-    // Fetch user from DB
     const user = await getUserByEmail(email);
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
 
-    // Compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
+    return res.redirect('/index.html');; 
 
-    res.status(200).json({ message: 'Login successful', user });
+    // res.status(200).json({ message: 'Login successful', user });
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ message: 'Server error during login.' });
   }
 });
 
-// Global Error Handling
-app.use((err, req, res, next) => {
-  console.error('Global error:', err.stack);
-  res.status(500).send('Something went wrong!');
+// ----- REGISTER ROUTE -----
+app.get('/register', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'register.html'));
 });
 
+app.post('/register', async (req, res) => {
+  const {
+    firstname,
+    lastname,
+    numKids,
+    ageKids,
+    phone,
+    email,
+    location,
+    profilePic,
+    password,
+    confirmPassword,
+  } = req.body;
+
+  if (!firstname || !lastname || !numKids || !ageKids || !phone || !email || !location || !profilePic || !password) {
+    return res.status(400).json({ message: 'Missing required fields' });
+  }
+
+  if (password !== confirmPassword) {
+    return res.status(400).json({ message: 'Passwords do not match' });
+  }
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await createUser({
+      firstname,
+      lastname,
+      numKids,
+      ageKids,
+      phone,
+      email,
+      location,
+      profilePic,
+      password: hashedPassword,
+    });
+    res.redirect('/login.html'); 
+
+    // res.status(201).json({ message: 'User registered successfully', user: newUser });
+  } catch (error) {
+    console.error('Registration error:', error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// ----- STATIC ROUTES -----
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
+
+app.get('/api/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'login.html'));
+});
+
+// ----- PAYMENT DETAILS -----
 app.get('/api/payment-details', (req, res) => {
   res.json({
     companyName: 'Mata2Me Ltd',
     paybill: '123456',
     accountNumber: 'M2M-001',
   });
+});
+
+// ----- GLOBAL ERROR HANDLER -----
+app.use((err, req, res, next) => {
+  console.error('Global error:', err.stack);
+  res.status(500).send('Something went wrong!');
 });
 
 export default app;

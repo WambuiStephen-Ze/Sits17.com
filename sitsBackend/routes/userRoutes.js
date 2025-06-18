@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/register', registerParent);
 
 //login parents as users
-router.post('/login', loginParent);
+router.post('/api/login/parent', loginParent);
 
 
 // get user by id

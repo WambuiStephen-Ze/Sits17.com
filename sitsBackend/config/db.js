@@ -64,9 +64,14 @@ export async function createUser(userData) {
   try {
     return await User.create(userData); // Sequelize hook will hash password
   } catch (error) {
+    if (error.name === "SequelizeValidationError" || error.name === "SequelizeUniqueConstraintError") {
+      const messages = error.errors.map(err => `${err.path}: ${err.message}`);
+      throw new Error(`Validation error: ${messages.join(", ")}`);
+    }
     throw new Error(`Error creating user: ${error.message}`);
   }
 }
+
 
 //function to get all sitters
 export async function getSitters() {
