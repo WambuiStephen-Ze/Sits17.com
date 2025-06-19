@@ -265,7 +265,7 @@
 // //         alert(email.includes('@') ? `Thanks for subscribing with ${email}!` : 'Please enter a valid email');
 // //         e.target.reset();
 // //     });
-const BASE_URL =" http://localhost:3000/login";
+const BASE_URL =" http://localhost:3000";
 
 function toggleMenu() {
   const navLinks = document.getElementById("nav-links");
@@ -352,7 +352,7 @@ const registerUser = () => {
     };
 
     try {
-      const res = await fetch(`${BASE_URL}/auth/register`, {
+      const res = await fetch(`${BASE_URL}/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -416,7 +416,7 @@ const registerUser = () => {
      const endpoint = role === "sitter" ? "/sitters/login" : "/auth/login";
 
      try {
-       const res = await fetch(`${BASE_URL}${endpoint}`, {
+       const res = await fetch(`${BASE_URL}`, {
          method: "POST",
          headers: { "Content-Type": "application/json" },
          body: JSON.stringify({ email, password }),
@@ -426,7 +426,7 @@ const registerUser = () => {
        if (res.ok) {
          localStorage.setItem("token", data.token);
          alert("Login successful!");
-         window.location.href = "index"; // Redirect after login
+         window.location.href = "index.html"; // Redirect after login
        } else {
          alert(data.message || "Login failed.");
        }

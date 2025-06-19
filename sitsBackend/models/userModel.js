@@ -13,7 +13,7 @@ const userModel = (sequelize) => {
       primaryKey: true,
     },
     firstname: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING, 
       allowNull: false,
     },
     lastname: {

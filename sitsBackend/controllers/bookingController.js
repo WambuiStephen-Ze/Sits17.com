@@ -14,7 +14,7 @@ export const createBooking = async (req, res) => {
   try {
     const existingBooking = await Booking.findOne({
       where: {
-        sitterId,
+        sitterId, 
         status: {
           [Op.in]: ['pending', 'confirmed'],
         },

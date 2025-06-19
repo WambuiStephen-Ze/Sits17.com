@@ -8,24 +8,24 @@ dotenv.config();
 
 // Generate JWT token
 const generateToken = (user) => {
-  return jwt.sign({ id: user.id, email: user.email,  }, process.env.JWT_SECRET, {
+  return jwt.sign({ id: user.id, email: user.email, }, process.env.JWT_SECRET, {
     expiresIn: '1h',
   });
 };
 
 export const registerParent = async (req, res) => {
   try {
-    const { 
-      firstname, 
-      lastname, 
+    const {
+      firstname,
+      lastname,
       numKids,
-      ageKids,  
-      phone, 
+      ageKids,
+      phone,
       email,
-      location, 
-      profilePic, 
+      location,
+      profilePic,
       password,
-      confirmPassword} = req.body;
+      confirmPassword } = req.body;
 
     // Validate required fields
     if (!firstname || !lastname || !numKids || !ageKids || !phone || !email || !location || !profilePic || !password || !confirmPassword) {
@@ -33,33 +33,34 @@ export const registerParent = async (req, res) => {
     }
 
     // Check if user already exists
-    const existingUser = await getUserById(email);
+    const existingUser = await getUserByEmail(email);
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
     // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    //const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
     const user = await createUser({
-      firstname, 
-      lastname, 
+      firstname,
+      lastname,
       numKids,
-      ageKids,  
-      phone, 
+      ageKids,
+      phone,
       email,
-      location, 
-      profilePic, 
-      password: hashedPassword,
+      location,
+      profilePic,
+      password,
       confirmPassword
-       
+
     });
 
     // Generate and return JWT token
     const token = generateToken(user);
 
-    res.status(201).json({ user, token });
+    //res.status(201).json({ user, token });
+    res.redirect('login.html'); // Redirect to login.html after successful registration
   } catch (err) {
     console.error('Parent registration error:', err);
     res.status(500).json({ message: 'Registration failed', error: err.message });
@@ -87,13 +88,16 @@ export const loginParent = async (req, res) => {
       expiresIn: '7d',
     });
 
-    res.json({
+    /*
+      res.json({
       id: user.id,
       firstname: user.firstname,
       lastname: user.lastname,
       email: user.email,
       token,
     });
+    */
+    res.redirect('index.html');
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ message: 'Server error', error: error.message });

@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 // import { Sitter } from '../models/index.js';
 
 dotenv.config();
-
+ 
 // Generate JWT token
 const generateToken = (sitter) => {
   return jwt.sign({ id: sitter.id, email: sitter.email, role: 'sitter' }, process.env.JWT_SECRET, {
